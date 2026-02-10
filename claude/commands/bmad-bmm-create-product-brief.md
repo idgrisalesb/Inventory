@@ -5,3 +5,5 @@ disable-model-invocation: true
 ---
 
 IT IS CRITICAL THAT YOU FOLLOW THIS COMMAND: LOAD the FULL @{project-root}/_bmad/bmm/workflows/1-analysis/create-product-brief/workflow.md, READ its entire contents and follow its directions exactly!
+
+ALSO LOAD and READ the extension file at @{project-root}/_siesa-agents/bmm/workflows/1-analysis/create-product-brief/workflow_ext.md and follow its instructions to load company standards.

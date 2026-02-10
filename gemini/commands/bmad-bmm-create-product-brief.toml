@@ -9,6 +9,9 @@ WORKFLOW INSTRUCTIONS:
 2. READ its entire contents
 3. FOLLOW every step precisely as specified
 4. DO NOT skip or modify any steps
+5. LOAD and READ the extension file from {project-root}/_siesa-agents/bmm/workflows/1-analysis/create-product-brief/workflow_ext.md
+6. FOLLOW its instructions to load company standards.
 
 WORKFLOW FILE: {project-root}/_bmad/bmm/workflows/1-analysis/create-product-brief/workflow.md
+EXTENSION FILE: {project-root}/_siesa-agents/bmm/workflows/1-analysis/create-product-brief/workflow_ext.md
 """
