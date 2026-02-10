@@ -1,0 +1,50 @@
+# Excluir archivos de desarrollo
+node_modules/
+npm-debug.log*
+.npm
+.eslintcache
+.nyc_output
+coverage/
+.coverage
+*.lcov
+
+# Excluir archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Excluir archivos de git
+.git/
+.gitignore
+.gitattributes
+.gitlab-ci.yml
+
+# Excluir archivos de configuración local
+.env*
+
+# Excluir archivos de lock
+package-lock.json
+yarn.lock
+
+# Excluir carpetas con punto (usamos las versiones sin punto para publicar)
+.claude/
+.gemini/
+.github/
+.vscode/
+.cursor/
+
+# Excluir carpeta de output
+_bmad-output/
+
+# Incluir explícitamente las carpetas requeridas (sin punto)
+!_bmad/
+!vscode/
+!github/
+!claude/
+!gemini/
+!bin/
+!resources/
+!README.md
+!package.json
+!LICENSE
+!mcp.json
+!index.js

@@ -1,0 +1,14 @@
+# Git Attributes Configuration
+# This file defines how Git should handle specific files during merges
+
+# Package.json - Use union merge strategy to avoid conflicts
+# This will combine changes from both branches instead of creating merge conflicts
+package.json merge=union
+
+# Alternative approach: You can also use ours or theirs strategy
+# package.json merge=ours    # Always keep the current branch version
+# package.json merge=theirs  # Always use the incoming branch version
+
+# Lock files - typically should use ours strategy to maintain consistency
+package-lock.json merge=ours
+yarn.lock merge=ours

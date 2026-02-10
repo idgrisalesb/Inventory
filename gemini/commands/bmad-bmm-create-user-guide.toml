@@ -1,0 +1,17 @@
+description = """Genera guías de usuario comprehensivas en español e inglés desde épicas y PRDs, con diagramas Mermaid y trazabilidad completa"""
+prompt = """
+Execute the BMAD 'create-user-guide' workflow.
+
+CRITICAL: This is a structured step-file workflow. Follow these steps precisely:
+
+1. LOAD the workflow definition from {project-root}/_siesa-agents/bmm/workflows/5-documentation/create-user-guide/workflow.md
+2. READ its entire contents - this is the workflow entry point for creating user guides
+3. UNDERSTAND the step-file architecture:
+   - Each step is a self-contained instruction file
+   - Steps must be executed sequentially
+   - Just-in-time loading (only current step in memory)
+4. EXECUTE each step file as directed by the workflow
+5. SAVE outputs after EACH section when generating documents
+
+WORKFLOW FILE: {project-root}/_siesa-agents/bmm/workflows/5-documentation/create-user-guide/workflow.md
+"""

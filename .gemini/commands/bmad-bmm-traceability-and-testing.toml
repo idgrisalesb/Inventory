@@ -1,0 +1,17 @@
+description = """Generate functional traceability map (FR→Epic→Story→Task) and consolidated epic-level test plans from existing test cases"""
+prompt = """
+Execute the BMAD 'traceability-and-testing' workflow.
+
+CRITICAL: This is a structured step-file workflow. Follow these steps precisely:
+
+1. LOAD the workflow definition from {project-root}/_siesa-agents/bmm/workflows/4-implementation/traceability-and-testing/workflow.md
+2. READ its entire contents - this is the workflow entry point for traceability and test planning
+3. UNDERSTAND the step-file architecture:
+   - Each step is a self-contained instruction file
+   - Steps must be executed sequentially
+   - Just-in-time loading (only current step in memory)
+4. EXECUTE each step file as directed by the workflow
+5. SAVE outputs after EACH section when generating documents
+
+WORKFLOW FILE: {project-root}/_siesa-agents/bmm/workflows/4-implementation/traceability-and-testing/workflow.md
+"""
