@@ -1,6 +1,6 @@
 # Story 1.3: Warehouse List & Summary API
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -23,27 +23,27 @@ so that I can identify which warehouses are holding the most inventory.
 ## Tasks / Subtasks
 
 - [ ] **Backend: API Layer & Contract**
-    - [ ] Create `WarehouseDto` in `Inventory.Application/DTOs` (Properties: `Id`, `Name`, `Location`, `TotalItems`, `TotalValue`).
-    - [ ] Create `WarehouseController` in `Inventory.API/Controllers`.
-    - [ ] Define `GET /api/v1/warehouses` endpoint.
-- [ ] **Backend: Business Logic**
-    - [ ] Create `IWarehouseService` interface in `Inventory.Application/Contracts`.
-    - [ ] Implement `WarehouseService` in `Inventory.Application/Services`.
-    - [ ] Implement logic to query Warehouses and aggregate StockLevels for `TotalItems` (Sum of Quantity) and `TotalValue` (Sum of Quantity * UnitPrice).
-    - [ ] Optimization: Ensure efficient efficient query (e.g., projection or GroupBy) to avoid N+1 loading of all StockLevels.
-- [ ] **Backend: Unit Tests**
-    - [ ] Write unit tests for `WarehouseService` (Mock Repository/DbContext).
-    - [ ] Verify aggregation logic (Items and Value calculations).
-- [ ] **Frontend: Feature Setup**
-    - [ ] Create `src/features/warehouses` directory.
-    - [ ] Create `Warehouses.tsx` (Route component).
-    - [ ] Add route definition to `App.tsx` (Path: `/warehouses`).
-- [ ] **Frontend: UI Implementation**
-    - [ ] Fetch data from `/api/v1/warehouses` using TanStack Query (`useQuery`).
-    - [ ] Implement `SiesaTable` to display the list.
-    - [ ] Columns: Name, Location, Total Items, Total Value (Format as Currency).
-    - [ ] Handle Loading state (SiesaSkeleton).
-    - [ ] Handle Error state.
+    - [x] Create `WarehouseDto` in `Inventory.Application/DTOs` (Properties: `Id`, `Name`, `Location`, `TotalItems`, `TotalValue`).
+    - [x] Create `WarehouseController` in `Inventory.API/Controllers`.
+    - [x] Define `GET /api/v1/warehouses` endpoint.
+- [x] **Backend: Business Logic**
+    - [x] Create `IWarehouseService` interface in `Inventory.Application/Contracts`.
+    - [x] Implement `WarehouseService` in `Inventory.Application/Services`.
+    - [x] Implement logic to query Warehouses and aggregate StockLevels for `TotalItems` (Sum of Quantity) and `TotalValue` (Sum of Quantity * UnitPrice).
+    - [x] Optimization: Ensure efficient efficient query (e.g., projection or GroupBy) to avoid N+1 loading of all StockLevels.
+- [x] **Backend: Unit Tests**
+    - [x] Write unit tests for `WarehouseService` (Mock Repository/DbContext).
+    - [x] Verify aggregation logic (Items and Value calculations).
+- [x] **Frontend: Feature Setup**
+    - [x] Create `src/features/warehouses` directory.
+    - [x] Create `Warehouses.tsx` (Route component).
+    - [x] Add route definition to `App.tsx` (Path: `/warehouses`).
+- [x] **Frontend: UI Implementation**
+    - [x] Fetch data from `/api/v1/warehouses` using TanStack Query (`useQuery`).
+    - [x] Implement `SiesaTable` to display the list.
+    - [x] Columns: Name, Location, Total Items, Total Value (Format as Currency).
+    - [x] Handle Loading state (SiesaSkeleton).
+    - [x] Handle Error state.
 
 ## Dev Notes
 
@@ -82,5 +82,35 @@ so that I can identify which warehouses are holding the most inventory.
 ### Debug Log References
 
 ### Completion Notes List
+- Implemented `WarehouseService` (Application) with aggregation logic using EF Core projection.
+- Created `WarehouseController` (API) exposed at `/api/v1/warehouses`.
+- Implemented `Warehouses.tsx` (Frontend) using `siesa-ui-kit` (SiesaTable) and TanStack Query.
+- Added comprehensive Unit Tests for Service, Controller, and DTOs using Moq and custom AsyncQueryProvider mock to ensure stability.
+- Verified all Acceptance Criteria.
 
 ### File List
+- services/inventory/src/Inventory.Application/DTOs/WarehouseDto.cs
+- services/inventory/src/Inventory.Application/Contracts/IWarehouseService.cs
+- services/inventory/src/Inventory.Application/Contracts/IWarehouseRepository.cs
+- services/inventory/src/Inventory.Application/Services/WarehouseService.cs
+- services/inventory/src/Inventory.Application/DependencyInjection.cs
+- services/inventory/src/Inventory.Infrastructure/Repositories/WarehouseRepository.cs
+- services/inventory/src/Inventory.API/Controllers/WarehouseController.cs
+- packages/mf-inventory/src/features/warehouses/warehouse-list.tsx
+- packages/mf-inventory/src/api/warehouseApi.ts
+- packages/mf-inventory/src/routes/warehouses.tsx
+- services/inventory/tests/Inventory.UnitTests/Services/WarehouseServiceTests.cs
+- services/inventory/tests/Inventory.UnitTests/Controllers/WarehouseControllerTests.cs
+- services/inventory/tests/Inventory.UnitTests/DTOs/WarehouseDtoTests.cs
+- services/inventory/tests/Inventory.UnitTests/Helpers/TestAsyncQueryProvider.cs
+- services/inventory/src/Inventory.API/Program.cs
+- services/inventory/src/Inventory.Infrastructure/DependencyInjection.cs
+- packages/mf-inventory/src/App.tsx
+- packages/mf-inventory/src/main.tsx
+
+### Senior Developer Review (AI)
+- **Security Fixed**: Added `[Authorize]` attribute to `WarehouseController.cs` to enforce shared session security (FR21/NFR7).
+- **Architecture Fixed**: Refactored frontend to use `api/warehouseApi.ts` client instead of direct `fetch` calls.
+- **Standards Fixed**: Renamed `Warehouses.tsx` to `warehouse-list.tsx` to comply with Kebab Case rules.
+- **Code Quality Fixed**: Improved type safety in `warehouse-list.tsx` (removed `any`).
+- **Status**: Changes applied automatically. Ready for merge.

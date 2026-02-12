@@ -4,8 +4,9 @@ import { useAuth } from './context/AuthContext';
 // No generator yet
 import { rootRoute } from './routes/__root';
 import { indexRoute } from './routes/index';
+import { warehousesRoute } from './routes/warehouses';
 
-const routeTree = rootRoute.addChildren([indexRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, warehousesRoute]);
 
 const router = createRouter({ routeTree });
 

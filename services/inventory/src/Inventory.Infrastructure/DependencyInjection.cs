@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Inventory.Infrastructure.Persistence;
 
+using Inventory.Application.Contracts;
+using Inventory.Infrastructure.Repositories;
+
 namespace Inventory.Infrastructure
 {
     public static class DependencyInjection
@@ -14,6 +17,8 @@ namespace Inventory.Infrastructure
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(InventoryDbContext).Assembly.FullName))
                 .UseSnakeCaseNamingConvention());
+
+            services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 
             return services;
         }

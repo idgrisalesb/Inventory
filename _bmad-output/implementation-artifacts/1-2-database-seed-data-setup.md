@@ -1,6 +1,6 @@
 # Story 1.2: Database & Seed Data Setup
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -83,7 +83,7 @@ so that the dashboard has meaningful data to display immediately upon deployment
 
 ### Agent Model Used
 
-Google Gemini 3 Pro Preview
+Google Gemini 3 Pro Preview (Adversarial Review by Claude Code)
 
 ### Debug Log References
 
@@ -97,6 +97,10 @@ Google Gemini 3 Pro Preview
 - Updated `appsettings.json` to point to port 5433 and auto-apply migrations on startup (via `dotnet ef database update`).
 - Verified database tables and data using `psql` inside the container.
 - All 6 Acceptance Criteria passed.
+- **Review Updates:**
+    - Fixed `Program.cs` to remove WeatherForecast code and implement automatic migration application on startup.
+    - Added `DomainTests.cs` to `Inventory.UnitTests` to verify domain entities and seeding logic structures.
+    - Removed invalid `WarehouseDtoTests.cs`.
 
 ### File List
 
@@ -114,4 +118,5 @@ Google Gemini 3 Pro Preview
 - `services/inventory/src/Inventory.API/appsettings.json`
 - `services/inventory/src/Inventory.API/Dockerfile`
 - `services/inventory/tests/Inventory.UnitTests/Inventory.UnitTests.csproj`
+- `services/inventory/tests/Inventory.UnitTests/DomainTests.cs`
 - `docker-compose.yml`
