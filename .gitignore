@@ -66,3 +66,26 @@ coverage/
 # Lock files (opcional, depende de tu estrategia)
 # package-lock.json
 # yarn.lock
+
+# .NET
+bin/
+obj/
+**/bin/
+**/obj/
+.vs/
+**/.vs/
+*.user
+*.suo
+*.userprefs
+*.lock.json
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
