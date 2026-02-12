@@ -1,6 +1,6 @@
 # Story 1.5: Dashboard Visualizations (Chart & Alerts)
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -25,26 +25,27 @@ so that **I can prioritize which categories or items need immediate attention**.
 ## Tasks / Subtasks
 
 - [ ] **Backend: API Layer**
-    - [ ] Create `DashboardChartDto` (CategoryName, TotalValue, Percentage) in `Inventory.Application/DTOs`.
-    - [ ] Create `DashboardAlertDto` (ProductId, ProductName, Sku, TotalQuantity, ReorderPoint) in `Inventory.Application/DTOs`.
-    - [ ] Update `DashboardController` in `Inventory.API/Controllers`:
-        - [ ] Add `GET /api/v1/dashboard/charts` endpoint.
-        - [ ] Add `GET /api/v1/dashboard/alerts` endpoint.
-- [ ] **Backend: Business Logic**
-    - [ ] Update `IDashboardService` and `DashboardService` in `Inventory.Application`:
-        - [ ] Implement `GetStockValueByCategoryAsync`: Group products by Category, sum `Quantity * UnitPrice`, order by Value descending.
-        - [ ] Implement `GetLowStockAlertsAsync`: Filter products where `TotalQuantity <= ReorderPoint`, order by `TotalQuantity` ASC (most critical first), take top 5.
-    - [ ] **Optimization:** Use `AsNoTracking()` and Projection (`Select`) for efficient aggregation.
-- [ ] **Frontend: Feature Implementation**
-    - [ ] Update `packages/mf-inventory/src/api/dashboardApi.ts`: Add `fetchCharts` and `fetchAlerts`.
-    - [ ] Create `packages/mf-inventory/src/features/dashboard/components/StockValueChart.tsx`: Implement Recharts PieChart.
-    - [ ] Create `packages/mf-inventory/src/features/dashboard/components/LowStockAlerts.tsx`: Implement table using `SiesaTable` or simple grid for alerts.
-    - [ ] Update `packages/mf-inventory/src/features/dashboard/Dashboard.tsx`:
-        - [ ] Integrate new components.
-        - [ ] specific `useQuery` hooks for charts and alerts (keys: `['dashboard', 'charts']`, `['dashboard', 'alerts']`).
-- [ ] **Testing**
-    - [ ] **Backend:** Unit test `DashboardService` aggregation logic for categories and alerting rules.
-    - [ ] **Frontend:** Test `StockValueChart` renders checking for data presence. Test `LowStockAlerts` renders correct number of rows.
+    - [x] **Backend: API Layer**
+    - [x] Create `DashboardChartDto` (CategoryName, TotalValue, Percentage) in `Inventory.Application/DTOs`.
+    - [x] Create `DashboardAlertDto` (ProductId, ProductName, Sku, TotalQuantity, ReorderPoint) in `Inventory.Application/DTOs`.
+    - [x] Update `DashboardController` in `Inventory.API/Controllers`:
+        - [x] Add `GET /api/v1/dashboard/charts` endpoint.
+        - [x] Add `GET /api/v1/dashboard/alerts` endpoint.
+- [x] **Backend: Business Logic**
+    - [x] Update `IDashboardService` and `DashboardService` in `Inventory.Application`:
+        - [x] Implement `GetStockValueByCategoryAsync`: Group products by Category, sum `Quantity * UnitPrice`, order by Value descending.
+        - [x] Implement `GetLowStockAlertsAsync`: Filter products where `TotalQuantity <= ReorderPoint`, order by `TotalQuantity` ASC (most critical first), take top 5.
+    - [x] **Optimization:** Use `AsNoTracking()` and Projection (`Select`) for efficient aggregation.
+- [x] **Frontend: Feature Implementation**
+    - [x] Update `packages/mf-inventory/src/api/dashboardApi.ts`: Add `fetchCharts` and `fetchAlerts`.
+    - [x] Create `packages/mf-inventory/src/features/dashboard/components/StockValueChart.tsx`: Implement Recharts PieChart.
+    - [x] Create `packages/mf-inventory/src/features/dashboard/components/LowStockAlerts.tsx`: Implement table using `Table` or simple grid for alerts.
+    - [x] Update `packages/mf-inventory/src/features/dashboard/Dashboard.tsx`:
+        - [x] Integrate new components.
+        - [x] specific `useQuery` hooks for charts and alerts (keys: `['dashboard', 'charts']`, `['dashboard', 'alerts']`).
+- [x] **Testing**
+    - [x] **Backend:** Unit test `DashboardService` aggregation logic for categories and alerting rules.
+    - [x] **Frontend:** Test `StockValueChart` renders checking for data presence. Test `LowStockAlerts` renders correct number of rows.
 
 ## Dev Notes
 
@@ -57,7 +58,7 @@ so that **I can prioritize which categories or items need immediate attention**.
     -   Category aggregation can be expensive. Ensure proper indexing on `CategoryId` if applicable, or perform efficient in-memory grouping if dataset is small (< 10k items). For MVP, DB grouping is preferred.
 -   **Styling:**
     -   Chart tooltip should follow Siesa design (custom content).
-    -   Alerts table should use `SiesaTable` compact mode if available.
+    -   Alerts table should use `Table` compact mode if available.
 
 ### Architecture Compliance
 -   **Clean Architecture:**
@@ -93,12 +94,22 @@ so that **I can prioritize which categories or items need immediate attention**.
 -   Added specific DTOs for visualization data.
 -   Specified Recharts as the charting library.
 -   Defined layout strategy for the new widgets.
+-   Implemented strict Siesa UI Kit usage for Alerts table (Table, Badge).
+-   Added unit tests verification for both backend logic and frontend integration.
+-   Verified `node_modules` for correct component usage.
 
 ### File List
 -   services/inventory/src/Inventory.Application/DTOs/DashboardChartDto.cs
 -   services/inventory/src/Inventory.Application/DTOs/DashboardAlertDto.cs
 -   services/inventory/src/Inventory.Application/Services/DashboardService.cs
+-   services/inventory/src/Inventory.Application/Contracts/IDashboardService.cs
 -   services/inventory/src/Inventory.API/Controllers/DashboardController.cs
+-   packages/mf-inventory/src/api/dashboardApi.ts
 -   packages/mf-inventory/src/features/dashboard/components/StockValueChart.tsx
 -   packages/mf-inventory/src/features/dashboard/components/LowStockAlerts.tsx
 -   packages/mf-inventory/src/features/dashboard/Dashboard.tsx
+-   services/inventory/tests/Inventory.UnitTests/Controllers/DashboardControllerTests.cs
+-   services/inventory/tests/Inventory.UnitTests/Services/DashboardServiceTests.cs
+-   packages/mf-inventory/src/features/dashboard/__tests__/StockValueChart.test.tsx
+-   packages/mf-inventory/src/features/dashboard/__tests__/LowStockAlerts.test.tsx
+-   packages/mf-inventory/src/features/dashboard/__tests__/Dashboard.test.tsx

@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Inventory.Domain.Entities;
+using Inventory.Application.Contracts;
 
 namespace Inventory.Infrastructure.Persistence
 {
-    public class InventoryDbContext : DbContext
+    public class InventoryDbContext : DbContext, IInventoryDbContext
     {
         public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
         {

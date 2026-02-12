@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { SiesaTable, SiesaSkeleton } from 'siesa-ui-kit';
+import { Table, Skeleton } from 'siesa-ui-kit';
 import { useAuth } from '../../context/AuthContext';
 import { getWarehouses } from '../../api/warehouseApi';
 
@@ -12,7 +12,7 @@ export const WarehouseList = () => {
     queryFn: () => getWarehouses(token || null),
   });
 
-  if (isPending) return <div className="p-4"><SiesaSkeleton className="h-64 w-full" variant="rectangular" /></div>;
+  if (isPending) return <div className="p-4"><Skeleton className="h-64 w-full" /></div>;
 
   if (error) return <div className="p-4 text-red-500">Error loading warehouses: {error.message}</div>;
 
@@ -30,16 +30,16 @@ export const WarehouseList = () => {
         accessorKey: 'totalItems'
     },
     {
-      header: 'Valor Total',
-      accessorKey: 'totalValue',
-      cell: (info: { getValue: () => unknown }) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(info.getValue() as number)
+        header: 'Valor Total',
+        accessorKey: 'totalValue',
+        cell: (info: { getValue: () => unknown }) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(info.getValue() as number)
     },
   ];
 
   return (
     <div className="p-4">
         <h1 className="text-2xl font-bold mb-4 text-gray-800">Centros de Distribución</h1>
-        <SiesaTable
+        <Table
             data={data}
             columns={columns}
         />

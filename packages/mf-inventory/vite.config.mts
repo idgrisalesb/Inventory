@@ -21,6 +21,13 @@ export default defineConfig({
   server: {
     port: 3001,
     cors: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5263',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   test: {
     globals: true,

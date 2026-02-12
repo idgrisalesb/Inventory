@@ -24,3 +24,15 @@ const lifecycles = singleSpaReact({
 });
 
 export const { bootstrap, mount, unmount } = lifecycles;
+
+// Standalone setup for local development
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOMClient.createRoot(rootElement).render(
+    <React.StrictMode>
+      <AuthProvider initialToken={null}>
+        <App />
+      </AuthProvider>
+    </React.StrictMode>
+  );
+}
