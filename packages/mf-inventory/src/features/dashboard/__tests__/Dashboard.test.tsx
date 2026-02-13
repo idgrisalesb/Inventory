@@ -7,6 +7,41 @@ import * as dashboardApi from '../../../api/dashboardApi';
 // Mock API
 vi.mock('../../../api/dashboardApi');
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => {
+            const translations: Record<string, string> = {
+                'dashboard.kpi.totalSkus': 'Total SKUs',
+                'dashboard.kpi.totalValue': 'Total Value',
+                'dashboard.kpi.lowStock': 'Low Stock',
+                'dashboard.kpi.outOfStock': 'Out of Stock',
+                'dashboard.charts.stockValue': 'Stock Value by Category',
+                'dashboard.charts.noData': 'No data available',
+                'dashboard.alerts.title': 'Top Low Stock Alerts',
+                'dashboard.alerts.empty': 'No alerts at this time',
+                'dashboard.charts.loading': 'Loading Chart...',
+                'dashboard.alerts.loading': 'Loading Alerts...',
+                'dashboard.errors.title': 'Error',
+                'dashboard.errors.general': 'Error loading Dashboard. Please try again later.',
+                'dashboard.charts.error': 'Failed to load chart data.',
+                'dashboard.alerts.error': 'Failed to load alerts.',
+                'dashboard.alerts.columns.product': 'Product',
+                'dashboard.alerts.columns.qty': 'Qty',
+                'dashboard.alerts.columns.reorderPt': 'Reorder Pt',
+                'dashboard.alerts.columns.status': 'Status',
+                'dashboard.alerts.status.outOfStock': 'Out of Stock',
+                'dashboard.alerts.status.lowStock': 'Low Stock'
+            };
+            return translations[key] || key;
+        },
+        i18n: {
+            language: 'en-US',
+            changeLanguage: vi.fn(),
+        }
+    }),
+}));
+
 // Mock siesa-ui-kit
 vi.mock('siesa-ui-kit', () => ({
     Card: ({ children }: any) => <div>{children}</div>,
@@ -28,6 +63,11 @@ vi.mock('recharts', () => ({
     Pie: () => <div>Pie</div>,
     Cell: () => <div>Cell</div>,
     Tooltip: () => <div>Tooltip</div>
+}));
+
+// Mock Router
+vi.mock('@tanstack/react-router', () => ({
+    useNavigate: () => vi.fn(),
 }));
 
 const createTestQueryClient = () => new QueryClient({
@@ -85,7 +125,9 @@ describe('Dashboard Component', () => {
         // Check if values appear
         expect(await screen.findByText('42')).toBeInTheDocument(); // SKUs
         // Currency format check (regex for simple currency)
-        expect(await screen.findByText(/\$12,500\.50/)).toBeInTheDocument();
+        // With COP currency hardcoded, it should contain COP
+        expect(await screen.findByText(/COP/)).toBeInTheDocument();
+        expect(await screen.findByText(/12,500\.50/)).toBeInTheDocument();
         expect(await screen.findByText('5')).toBeInTheDocument(); // Low Stock
         expect(await screen.findByText('2')).toBeInTheDocument(); // Out of Stock
     });

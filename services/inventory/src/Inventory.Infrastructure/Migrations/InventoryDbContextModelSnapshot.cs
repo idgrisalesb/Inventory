@@ -60,6 +60,12 @@ namespace Inventory.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_products");
 
+                    b.HasIndex("Name")
+                        .HasDatabaseName("ix_products_name");
+
+                    b.HasIndex("Sku")
+                        .HasDatabaseName("ix_products_sku");
+
                     b.ToTable("products", (string)null);
 
                     b.HasData(

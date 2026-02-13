@@ -1,14 +1,25 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { DashboardChart } from '../../../api/dashboardApi';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface StockValueChartProps {
   data: DashboardChart[];
 }
 
-const COLORS = ['#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE']; // Tailwind Blue 600-200
+const COLORS = [
+  '#2563EB', // Blue 600
+  '#DC2626', // Red 600
+  '#D97706', // Amber 600
+  '#059669', // Emerald 600
+  '#7C3AED', // Violet 600
+  '#DB2777', // Pink 600
+  '#475569', // Slate 600
+];
 
 export const StockValueChart = ({ data }: StockValueChartProps) => {
+  const { t, i18n } = useTranslation();
+
   const chartData = useMemo(() => {
     return data.map((item) => ({
       name: item.categoryName,
@@ -19,14 +30,14 @@ export const StockValueChart = ({ data }: StockValueChartProps) => {
   if (!data || data.length === 0) {
     return (
       <div className="bg-white p-4 rounded-lg shadow h-[300px] flex items-center justify-center text-gray-500">
-        No data available
+        {t('dashboard.charts.noData')}
       </div>
     );
   }
 
   return (
     <div className="bg-white p-4 rounded-lg shadow h-[300px]">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">Stock Value by Category</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-4">{t('dashboard.charts.stockValue')}</h3>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -43,7 +54,7 @@ export const StockValueChart = ({ data }: StockValueChartProps) => {
             ))}
           </Pie>
           <Tooltip
-             formatter={(value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)}
+             formatter={(value: number) => new Intl.NumberFormat(i18n.language || 'es-CO', { style: 'currency', currency: 'COP' }).format(value)}
           />
         </PieChart>
       </ResponsiveContainer>

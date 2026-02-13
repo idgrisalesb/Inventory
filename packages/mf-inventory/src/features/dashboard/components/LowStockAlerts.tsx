@@ -1,6 +1,7 @@
 import { Table, Badge } from 'siesa-ui-kit';
 import { DashboardAlert } from '../../../api/dashboardApi';
 import { useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 interface LowStockAlertsProps {
   data: DashboardAlert[];
@@ -8,6 +9,7 @@ interface LowStockAlertsProps {
 
 export const LowStockAlerts = ({ data }: LowStockAlertsProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleRowClick = (row: DashboardAlert) => {
     // Navigate to product detail
@@ -17,17 +19,17 @@ export const LowStockAlerts = ({ data }: LowStockAlertsProps) => {
   };
 
   const columns = [
-    { header: 'Product', accessor: 'productName' },
-    { header: 'Qty', accessor: 'totalQuantity' },
-    { header: 'Reorder Pt', accessor: 'reorderPoint' },
+    { header: t('dashboard.alerts.columns.product'), accessor: 'productName' },
+    { header: t('dashboard.alerts.columns.qty'), accessor: 'totalQuantity' },
+    { header: t('dashboard.alerts.columns.reorderPt'), accessor: 'reorderPoint' },
     {
-      header: 'Status',
+      header: t('dashboard.alerts.columns.status'),
       accessor: 'totalQuantity',
       render: (_: any, row: DashboardAlert) => {
         const isOutOfStock = row.totalQuantity === 0;
         return (
           <Badge color={isOutOfStock ? 'red' : 'yellow'}>
-            {isOutOfStock ? 'Out of Stock' : 'Low Stock'}
+            {isOutOfStock ? t('dashboard.alerts.status.outOfStock') : t('dashboard.alerts.status.lowStock')}
           </Badge>
         );
       }
@@ -36,13 +38,13 @@ export const LowStockAlerts = ({ data }: LowStockAlertsProps) => {
 
   return (
       <Table
-        title="Top Low Stock Alerts"
+        title={t('dashboard.alerts.title')}
         columns={columns}
         data={data}
         onRowClick={handleRowClick}
         variant="striped"
         showShadow={true}
-        emptyMessage="No alerts at this time"
+        emptyMessage={t('dashboard.alerts.empty')}
         fullWidth
       />
   );

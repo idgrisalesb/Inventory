@@ -1,6 +1,6 @@
 # Story 1.6: Internationalization (i18n)
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -23,33 +23,33 @@ so that **I can work in my preferred language**.
 
 ## Tasks / Subtasks
 
-- [ ] **Frontend: Infrastructure & Config**
-    - [ ] Install dependencies: `i18next`, `react-i18next`.
-    - [ ] Create configuration file `packages/mf-inventory/src/i18n/config.ts`.
-    - [ ] Setup `i18n` instance to initialize with a default language (e.g., 'es').
-    - [ ] Create translation assets structure:
-        - [ ] `packages/mf-inventory/src/locales/es/translation.json`
-        - [ ] `packages/mf-inventory/src/locales/en/translation.json`
-    - [ ] Configure `i18next` to use these resources (embedded or lazy-loaded via dynamic imports).
+- [x] **Frontend: Infrastructure & Config**
+    - [x] Install dependencies: `i18next`, `react-i18next`.
+    - [x] Create configuration file `packages/mf-inventory/src/i18n/config.ts`.
+    - [x] Setup `i18n` instance to initialize with a default language (e.g., 'es').
+    - [x] Create translation assets structure:
+        - [x] `packages/mf-inventory/src/locales/es/translation.json`
+        - [x] `packages/mf-inventory/src/locales/en/translation.json`
+    - [x] Configure `i18next` to use these resources (embedded or lazy-loaded via dynamic imports).
 
-- [ ] **Frontend: Shell Integration**
-    - [ ] Update `packages/mf-inventory/src/root.component.tsx` or `App.tsx`:
-        - [ ] Read `customProps` passed by Single-SPA for initial language (if provided).
-        - [ ] Implement an event listener for a custom shell event (e.g., `siesa:language:change` or `single-spa:routing-event` checks) to update the `i18n` language dynamically.
-        - [ ] **Decision**: If shell contract is unclear, implement a `window.addEventListener('language-change')` stub that can be easily connected to the real shell event.
+- [x] **Frontend: Shell Integration**
+    - [x] Update `packages/mf-inventory/src/root.component.tsx` or `App.tsx`:
+        - [x] Read `customProps` passed by Single-SPA for initial language (if provided).
+        - [x] Implement an event listener for a custom shell event (e.g., `siesa:language:change` or `single-spa:routing-event` checks) to update the `i18n` language dynamically.
+        - [x] **Decision**: If shell contract is unclear, implement a `window.addEventListener('language-change')` stub that can be easily connected to the real shell event.
 
-- [ ] **Frontend: Implementation (Refactor)**
-    - [ ] **Dashboard**: Replace hardcoded strings in `Dashboard.tsx`, `StockValueChart.tsx`, `LowStockAlerts.tsx`.
-    - [ ] **Navigation**: Update Sidebar/Menu links text (if managed internally).
-    - [ ] **Shared Components**: Update `SiesaTable` column headers and `SiesaStatus` labels to accept translated strings.
-    - [ ] **Formatting**: Use `Intl.NumberFormat` or `i18next` formatting for Currency and Numbers based on the current locale.
+- [x] **Frontend: Implementation (Refactor)**
+    - [x] **Dashboard**: Replace hardcoded strings in `Dashboard.tsx`, `StockValueChart.tsx`, `LowStockAlerts.tsx`.
+    - [x] **Navigation**: Update Sidebar/Menu links text (if managed internally).
+    - [x] **Shared Components**: Update `SiesaTable` column headers and `SiesaStatus` labels to accept translated strings.
+    - [x] **Formatting**: Use `Intl.NumberFormat` or `i18next` formatting for Currency and Numbers based on the current locale.
 
-- [ ] **Backend: API Considerations**
-    - [ ] Ensure `ProblemDetails` error messages uses codes (e.g. `ERR_STOCK_LOW`) rather than just text, so frontend can translate distinct errors. (Refactor `Inventory.API` if necessary, though mainly UI focus).
+- [x] **Backend: API Considerations**
+    - [x] Ensure `ProblemDetails` error messages uses codes (e.g. `ERR_STOCK_LOW`) rather than just text, so frontend can translate distinct errors. (Refactor `Inventory.API` if necessary, though mainly UI focus).
 
-- [ ] **Testing**
-    - [ ] **Unit Tests**: Test that `t` function returns correct keys/values.
-    - [ ] **Integration**: Test that changing the language triggers a re-render with new text.
+- [x] **Testing**
+    - [x] **Unit Tests**: Test that `t` function returns correct keys/values.
+    - [x] **Integration**: Test that changing the language triggers a re-render with new text.
 
 ## Dev Notes
 
@@ -81,8 +81,15 @@ so that **I can work in my preferred language**.
 -   Focus is on Frontend UI translation.
 -   Assumes Shell communicates language changes via event or props.
 -   Infrastructure setup included.
+-   Implemented `i18n` with `i18next` and `es`/`en` locales.
+-   Connected `App.tsx` to `siesa:language:change` event and `initialLanguage` prop.
+-   Refactored `Dashboard`, `DashboardComponents`, `WarehouseList`, and `RootComponent` to use `useTranslation`.
+-   Verified number/currency formatting uses `Intl.NumberFormat` with `i18n.language`.
+-   Verified backend `DashboardController` does not emit custom error text requiring refactor.
+-   Added unit and integration tests.
 
 ### File List
+-   packages/mf-inventory/package.json
 -   packages/mf-inventory/src/i18n/config.ts
 -   packages/mf-inventory/src/locales/es/translation.json
 -   packages/mf-inventory/src/locales/en/translation.json
@@ -90,3 +97,19 @@ so that **I can work in my preferred language**.
 -   packages/mf-inventory/src/features/dashboard/Dashboard.tsx
 -   packages/mf-inventory/src/features/dashboard/components/StockValueChart.tsx
 -   packages/mf-inventory/src/features/dashboard/components/LowStockAlerts.tsx
+-   packages/mf-inventory/src/features/warehouses/warehouse-list.tsx
+-   packages/mf-inventory/src/routes/__root.tsx
+-   packages/mf-inventory/src/__tests__/LanguageIntegration.test.tsx
+-   packages/mf-inventory/src/__tests__/TranslationIntegration.test.tsx
+-   packages/mf-inventory/src/features/dashboard/__tests__/Dashboard.test.tsx
+-   packages/mf-inventory/src/features/dashboard/__tests__/StockValueChart.test.tsx
+-   packages/mf-inventory/src/features/dashboard/__tests__/LowStockAlerts.test.tsx
+-   packages/mf-inventory/src/i18n/__tests__/i18n.test.ts
+-   services/inventory/src/Inventory.API/Controllers/DashboardController.cs
+
+### Senior Developer Review (AI)
+-   **CRITICAL FIX**: Populated empty `translation.json` files with actual keys used in UI components.
+-   **CLEANUP**: Removed duplicate ghost folder `packages/mf-inventory/packages/`.
+-   **STANDARDIZATION**: Enforced `es` default fallback and `es-CO`/`COP` formatting consistency across Dashboard and Warehouse components.
+-   **TEST IMPROVEMENT**: Updated tests to verify real translation keys (`dashboard.title`, `app.title`) and correct currency formatting (`COP` regex).
+-   **DOCS**: Added missing backend file to File List.

@@ -23,6 +23,13 @@ namespace Inventory.Infrastructure.Persistence
             // Seed Data
             modelBuilder.Seed();
 
+            // Indexes for Search Performance
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.Name);
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.Sku);
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -1,0 +1,63 @@
+{
+  "TEST": {
+    "hello": "Hello"
+  },
+  "app": {
+    "title": "Inventory Module",
+    "auth": {
+      "authenticated": "Authenticated",
+      "noToken": "No Token"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "warehouses": "Warehouses"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "errors": {
+      "title": "Error",
+      "general": "Could not load dashboard data.",
+      "error": "An error occurred"
+    },
+    "kpi": {
+      "totalSkus": "Total SKUs",
+      "totalValue": "Total Value",
+      "lowStock": "Low Stock",
+      "outOfStock": "Out of Stock"
+    },
+    "charts": {
+      "loading": "Loading charts...",
+      "error": "Error loading charts.",
+      "noData": "No data available",
+      "stockValue": "Stock Value by Category"
+    },
+    "alerts": {
+      "loading": "Loading alerts...",
+      "error": "Error loading alerts.",
+      "title": "Low Stock Alerts",
+      "empty": "No low stock alerts",
+      "columns": {
+        "product": "Product",
+        "qty": "Quantity",
+        "reorderPt": "Reorder Pt",
+        "status": "Status"
+      },
+      "status": {
+        "outOfStock": "Out of Stock",
+        "lowStock": "Low Stock"
+      }
+    }
+  },
+  "warehouses": {
+    "title": "Warehouses",
+    "error": "Error: {{error}}",
+    "columns": {
+      "name": "Name",
+      "location": "Location",
+      "totalItems": "Total Items",
+      "totalValue": "Total Value"
+    }
+  }
+}

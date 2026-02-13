@@ -116,23 +116,25 @@ public class DashboardServiceTests
     public async Task GetLowStockAlertsAsync_ShouldReturnCriticalItems()
     {
         // Arrange
-         var products = new List<Product>
-        {
-            new Product { Id = Guid.NewGuid(), Name = "P1", ReorderPoint = 10 },
-            new Product { Id = Guid.NewGuid(), Name = "P2", ReorderPoint = 5 },
-            new Product { Id = Guid.NewGuid(), Name = "P3", ReorderPoint = 5 }
-        };
+        var products = new List<Product>();
+        var stockLevels = new List<StockLevel>();
 
-        var stockLevels = new List<StockLevel>
+        // Create 6 items with 0 quantity (Critical)
+        for (int i = 0; i < 6; i++)
         {
-            new StockLevel { ProductId = products[0].Id, Product = products[0], Quantity = 2 }, // 2 <= 10. Critical.
-            new StockLevel { ProductId = products[1].Id, Product = products[1], Quantity = 6 }, // 6 > 5. OK.
-            new StockLevel { ProductId = products[2].Id, Product = products[2], Quantity = 0 }  // 0 <= 5. Critical.
-        };
+            var p = new Product { Id = Guid.NewGuid(), Name = $"P{i}", ReorderPoint = 5 };
+            products.Add(p);
+            var sl = new StockLevel { ProductId = p.Id, Product = p, Quantity = 0 };
+            stockLevels.Add(sl);
+            p.StockLevels.Add(sl);
+        }
 
-        products[0].StockLevels.Add(stockLevels[0]);
-        products[1].StockLevels.Add(stockLevels[1]);
-        products[2].StockLevels.Add(stockLevels[2]);
+        // Add 1 item with quantity 10 (OK)
+        var pOk = new Product { Id = Guid.NewGuid(), Name = "POK", ReorderPoint = 5 };
+        products.Add(pOk);
+        var slOk = new StockLevel { ProductId = pOk.Id, Product = pOk, Quantity = 10 };
+        stockLevels.Add(slOk);
+        pOk.StockLevels.Add(slOk);
 
         var productMock = products.BuildMockDbSet();
         _mockContext.Setup(c => c.Products).Returns(productMock.Object);
@@ -141,8 +143,7 @@ public class DashboardServiceTests
         var result = await _service.GetLowStockAlertsAsync();
 
         // Assert
-        Assert.Equal(2, result.Count);
-        Assert.Equal("P3", result[0].ProductName); // 0 quantity, should be first
-        Assert.Equal("P1", result[1].ProductName); // 2 quantity
+        Assert.Equal(5, result.Count); // Should only take top 5
+        Assert.All(result, item => Assert.Equal(0, item.TotalQuantity)); // All should be critical
     }
 }

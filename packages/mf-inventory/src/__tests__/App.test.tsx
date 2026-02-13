@@ -11,7 +11,8 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    expect(await screen.findByRole('heading', { name: /Inventory Module/i })).toBeInTheDocument();
+    // Defaults to ES
+    expect(await screen.findByRole('heading', { name: /Módulo de Inventario/i })).toBeInTheDocument();
   });
 
   it('shows "No Token" when unauthenticated', async () => {
@@ -20,7 +21,7 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    expect(await screen.findByText(/No Token/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Sin Token/i)).toBeInTheDocument();
   });
 
   it('shows "Authenticated" when token is provided', async () => {
@@ -29,6 +30,6 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    expect(await screen.findByText(/Authenticated/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Autenticado/i)).toBeInTheDocument();
   });
 });

@@ -25,7 +25,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("charts")]
-    public async Task<ActionResult<List<DashboardChartDto>>> GetStockValueChart()
+    public async Task<ActionResult<List<DashboardChartDto>>> GetCharts()
     {
         var result = await _service.GetStockValueByCategoryAsync();
         return Ok(result);

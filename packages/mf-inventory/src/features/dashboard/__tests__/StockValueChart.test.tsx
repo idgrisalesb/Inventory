@@ -2,6 +2,20 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { StockValueChart } from '../components/StockValueChart';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => {
+            const translations: Record<string, string> = {
+                'dashboard.charts.stockValue': 'Stock Value by Category',
+                'dashboard.charts.noData': 'No data available',
+            };
+            return translations[key] || key;
+        },
+        i18n: { language: 'en-US' }
+    }),
+}));
+
 // Mock Recharts
 vi.mock('recharts', () => ({
     ResponsiveContainer: ({ children }: any) => <div>{children}</div>,

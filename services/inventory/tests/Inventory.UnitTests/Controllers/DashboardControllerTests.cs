@@ -66,7 +66,7 @@ public class DashboardControllerTests
         var controller = new DashboardController(mockService.Object);
 
         // Act
-        var result = await controller.GetStockValueChart();
+        var result = await controller.GetCharts();
 
         // Assert
         var actionResult = Assert.IsType<ActionResult<List<DashboardChartDto>>>(result);

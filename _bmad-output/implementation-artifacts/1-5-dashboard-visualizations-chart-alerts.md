@@ -1,6 +1,6 @@
 # Story 1.5: Dashboard Visualizations (Chart & Alerts)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -97,6 +97,11 @@ so that **I can prioritize which categories or items need immediate attention**.
 -   Implemented strict Siesa UI Kit usage for Alerts table (Table, Badge).
 -   Added unit tests verification for both backend logic and frontend integration.
 -   Verified `node_modules` for correct component usage.
+-   **Code Review Fixes:**
+    -   Renamed `GetStockValueChart` to `GetCharts` in Controller/API for consistency.
+    -   Updated `StockValueChart` to use categorical colors (accessible palette) instead of single-hue shades.
+    -   Enhanced `DashboardServiceTests` to verify `Take(5)` limit strictly.
+    -   Enhanced `LowStockAlerts.test.tsx` to verify row click navigation (interactive test).
 
 ### File List
 -   services/inventory/src/Inventory.Application/DTOs/DashboardChartDto.cs

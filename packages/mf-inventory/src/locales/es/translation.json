@@ -1,0 +1,63 @@
+{
+  "TEST": {
+    "hello": "Hola"
+  },
+  "app": {
+    "title": "Módulo de Inventario",
+    "auth": {
+      "authenticated": "Autenticado",
+      "noToken": "Sin Token"
+    },
+    "nav": {
+      "dashboard": "Tablero",
+      "products": "Productos",
+      "warehouses": "Almacenes"
+    }
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "errors": {
+      "title": "Error",
+      "general": "No se pudieron cargar los datos del tablero.",
+      "error": "Ocurrió un error"
+    },
+    "kpi": {
+      "totalSkus": "SKUs Totales",
+      "totalValue": "Valor Total",
+      "lowStock": "Stock Bajo",
+      "outOfStock": "Sin Stock"
+    },
+    "charts": {
+      "loading": "Cargando gráficos...",
+      "error": "Error al cargar gráficos.",
+      "noData": "No hay datos disponibles",
+      "stockValue": "Valor de Inventario por Categoría"
+    },
+    "alerts": {
+      "loading": "Cargando alertas...",
+      "error": "Error al cargar alertas.",
+      "title": "Alertas de Stock Bajo",
+      "empty": "No hay alertas de stock bajo",
+      "columns": {
+        "product": "Producto",
+        "qty": "Cantidad",
+        "reorderPt": "Punto de Reorden",
+        "status": "Estado"
+      },
+      "status": {
+        "outOfStock": "Sin Stock",
+        "lowStock": "Bajo Stock"
+      }
+    }
+  },
+  "warehouses": {
+    "title": "Almacenes",
+    "error": "Error: {{error}}",
+    "columns": {
+      "name": "Nombre",
+      "location": "Ubicación",
+      "totalItems": "Artículos Totales",
+      "totalValue": "Valor Total"
+    }
+  }
+}
