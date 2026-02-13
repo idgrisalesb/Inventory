@@ -1,6 +1,7 @@
 import { createRoute } from '@tanstack/react-router';
 import { rootRoute } from './__root';
 import ProductList from '../features/products/ProductList';
+import ProductDetail from '../features/products/product-detail';
 
 interface ProductSearch {
   page: number;
@@ -27,4 +28,10 @@ export const productsRoute = createRoute({
       sortDir: search.sortDir === 'desc' ? 'desc' : (search.sortDir === 'asc' ? 'asc' : undefined),
     }
   },
+});
+
+export const productDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/products/$productId',
+  component: ProductDetail,
 });

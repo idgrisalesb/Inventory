@@ -28,6 +28,14 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductDetailDto>> GetById(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _service.GetProductByIdAsync(id, cancellationToken);
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
     [HttpGet("categories")]
     public async Task<ActionResult<IEnumerable<string>>> GetCategories(CancellationToken cancellationToken = default)
     {

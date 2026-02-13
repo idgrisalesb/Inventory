@@ -59,5 +59,26 @@
       "totalItems": "Artículos Totales",
       "totalValue": "Valor Total"
     }
+  },
+  "common": {
+    "back": "Atrás"
+  },
+  "products": {
+    "details": "Detalles del Producto",
+    "warehouseStock": "Existencias en Almacén",
+    "sku": "SKU",
+    "name": "Nombre",
+    "description": "Descripción",
+    "category": "Categoría",
+    "reorderPoint": "Punto de Reorden",
+    "totalStock": "Stock Total",
+    "unitPrice": "Precio Unitario",
+    "status": "Estado",
+    "warehouseName": "Nombre del Almacén",
+    "quantity": "Cantidad",
+    "stockValue": "Valor del Stock"
+  },
+  "error": {
+    "productNotFound": "Producto no encontrado"
   }
 }

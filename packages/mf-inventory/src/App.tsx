@@ -4,10 +4,11 @@ import { useAuth } from './context/AuthContext';
 import { rootRoute } from './routes/__root';
 import { indexRoute } from './routes/index';
 import { warehousesRoute } from './routes/warehouses';
-import { productsRoute } from './routes/products';
+import { productsRoute, productDetailRoute } from './routes/products';
+
 import i18n from './i18n/config';
 
-const routeTree = rootRoute.addChildren([indexRoute, warehousesRoute, productsRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, warehousesRoute, productsRoute, productDetailRoute]);
 
 const router = createRouter({ routeTree });
 

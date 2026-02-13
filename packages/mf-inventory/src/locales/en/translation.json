@@ -59,5 +59,26 @@
       "totalItems": "Total Items",
       "totalValue": "Total Value"
     }
+  },
+  "common": {
+    "back": "Back"
+  },
+  "products": {
+    "details": "Product Details",
+    "warehouseStock": "Warehouse Stock",
+    "sku": "SKU",
+    "name": "Name",
+    "description": "Description",
+    "category": "Category",
+    "reorderPoint": "Reorder Point",
+    "totalStock": "Total Stock",
+    "unitPrice": "Unit Price",
+    "status": "Status",
+    "warehouseName": "Warehouse Name",
+    "quantity": "Quantity",
+    "stockValue": "Stock Value"
+  },
+  "error": {
+    "productNotFound": "Product not found"
   }
 }

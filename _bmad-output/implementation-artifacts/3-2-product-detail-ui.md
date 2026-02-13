@@ -1,6 +1,6 @@
 # Story 3.2: Product Detail UI
 
-Status: ready-for-dev
+Status: done
 Story: 3.2
 Epic: 3 - Detailed Stock Analysis
 Author: SiesaTeam (BMad Workflow)
@@ -103,7 +103,69 @@ Author: SiesaTeam (BMad Workflow)
 - **UX:** `_bmad-output/planning-artifacts/ux-design-specification.md` - Section 5 (User Journeys) & 6 (Components).
 - **Architecture:** `_bmad-output/planning-artifacts/architecture.md` - Frontend Architecture sections.
 
-## STORY COMPLETION STATUS
+## TASKS/SUBTASKS
+- [x] **Define Types and API Client:**
+    - [x] Create/Update `ProductDetailDto` and `WarehouseStockDto` in `packages/mf-inventory/src/types.ts` (or create `packages/mf-inventory/src/types/product.ts` if preferred) matching backend DTOs.
+    - [x] Add `getProductDetail(id)` to `packages/mf-inventory/src/api/productApi.ts`.
+- [x] **Create Route and Component Skeleton:**
+    - [x]Create `packages/mf-inventory/src/features/products/ProductDetail.tsx`.
+    - [x] Register route path `/products/$productId` in `packages/mf-inventory/src/routes/products.tsx`.
+- [x] **Implement Data Fetching and Loading/Error States:**
+    - [x] Implement `useQuery` with key `['products', productId]`.
+    - [x] Handle `isLoading` with Loading content (Skeleton or fallback).
+    - [x] Handle `isError` with Error message.
+- [x] **Implement Product Header with DescriptionList:**
+    - [x] Use `siesa-ui-kit`'s `DescriptionList` to show: SKU, Name, Description, Category, Reorder Point, Total Stock.
+    - [x] Use `siesa-ui-kit`'s `Badge` for status (if applicable).
+    - [x] Use `siesa-ui-kit`'s `LayoutBase` if full page view.
+    - [x] Use `siesa-ui-kit`'s `Button` for Back navigation.
+- [x] **Implement Warehouse Stock Table:**
+    - [x] Use `siesa-ui-kit`'s `Table` to show warehouse stock breakdown.
+    - [x] Include columns: Warehouse Name, Quantity, Stock Value.
+    - [x] Display "Total Company Stock" summary.
+- [x] **Write Unit and Integration Tests:**
+    - [x] Create `packages/mf-inventory/src/__tests__/ProductDetail.test.tsx`.
+    - [x] Test Header display.
+    - [x] Test Table rendering.
+    - [x] Test Loading/Error states.
+    - [x] Test Navigation (mocked).
+
+## FILE LIST
+- packages/mf-inventory/src/types/product.ts
+- packages/mf-inventory/src/api/productApi.ts
+- packages/mf-inventory/src/features/products/product-detail.tsx
+- packages/mf-inventory/src/routes/products.tsx
+- packages/mf-inventory/src/App.tsx
+- packages/mf-inventory/src/locales/en/translation.json
+- packages/mf-inventory/src/locales/es/translation.json
+- packages/mf-inventory/src/__tests__/ProductDetail.test.tsx
+- packages/mf-inventory/src/__tests__/LanguageIntegration.test.tsx
+
+## CHANGE LOG
+- Added `ProductDetailDto` and `WarehouseStockDto` types.
+- Added `getProductDetail` API method.
+- Implemented `ProductDetail` component using `siesa-ui-kit` (`DescriptionList`, `Table`, `Badge`, `Button`).
+- Configured routing for `/products/:productId`.
+- Added English and Spanish translations.
+- Added comprehensive unit tests.
+- Fixed `LanguageIntegration` test regression.
+- Refactored `Product` type to `src/types/product.ts`.
+- Added missing `warehouseName`, `quantity`, `stockValue` translations.
+
+## DEV AGENT RECORD
+
+### Implementation Notes
+- Followed `siesa-ui-kit` guidelines. Used `DescriptionList` for key-value display and `Table` for warehouse breakdown.
+- Used `useQuery` for data fetching with loading/error handling.
+- Implemented `product-detail.tsx` in kebab-case as per conventions, despite story listing `ProductDetail.tsx`.
+- Updated translations for UI text.
+- Added comprehensive tests mocking `siesa-ui-kit` components to verify props and structure.
+- Review Fixes: Moved interfaces to domain-specific files. Completed translation keys.
+
+### Validation
+- All unit tests passed (31 tests total).
+- UI Requirements met.
+
 
 **Definition of Done:**
 1.  Page renders at `/products/:id`.

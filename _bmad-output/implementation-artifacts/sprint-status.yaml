@@ -58,6 +58,6 @@ development_status:
   epic-2-retrospective: optional
 
   epic-3: in-progress
-  3-1-product-detail-api: ready-for-dev
-  3-2-product-detail-ui: ready-for-dev
+  3-1-product-detail-api: done
+  3-2-product-detail-ui: done
   epic-3-retrospective: optional

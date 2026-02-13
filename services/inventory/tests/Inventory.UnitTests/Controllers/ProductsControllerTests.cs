@@ -101,4 +101,36 @@ public class ProductsControllerTests
         var problemDetails = Assert.IsType<ProblemDetails>(badRequestResult.Value);
         Assert.Equal("Invalid pageSize", problemDetails.Title);
     }
+
+    [Fact]
+    public async Task GetById_ShouldReturnNotFound_WhenProductDoesNotExist()
+    {
+        // Arrange
+        _mockService.Setup(s => s.GetProductByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((ProductDetailDto?)null);
+
+        // Act
+        var result = await _controller.GetById(Guid.NewGuid());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task GetById_ShouldReturnOk_WhenProductExists()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var productDto = new ProductDetailDto { Id = productId, Name = "Test Product" };
+        _mockService.Setup(s => s.GetProductByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(productDto);
+
+        // Act
+        var result = await _controller.GetById(productId);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnVal = Assert.IsType<ProductDetailDto>(okResult.Value);
+        Assert.Equal(productId, returnVal.Id);
+    }
 }

@@ -3,7 +3,7 @@ import { Table, Badge, BadgeColor, Input, Select, Button, SortDirection } from '
 import { MagnifyingGlassIcon } from '../../components/icons/MagnifyingGlassIcon';
 import { useProductList } from './hooks/useProductList';
 import { useCategories } from './hooks/useCategories';
-import { Product } from '../../types';
+import { Product } from '../../types/product';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 

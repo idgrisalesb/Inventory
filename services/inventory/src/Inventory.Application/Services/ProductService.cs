@@ -76,6 +76,41 @@ public class ProductService : IProductService
         return new PaginatedResult<ProductDto>(items, totalCount, pageNumber, pageSize);
     }
 
+    public async Task<ProductDetailDto?> GetProductByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var product = await _context.Products
+            .AsNoTracking()
+            .Include(p => p.StockLevels)
+            .ThenInclude(sl => sl.Warehouse)
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+        if (product == null) return null;
+
+        var totalStock = product.StockLevels.Sum(sl => sl.Quantity);
+        var stockStatus = totalStock == 0 ? ProductStockStatus.OutOfStock :
+                          totalStock <= product.ReorderPoint ? ProductStockStatus.LowStock : ProductStockStatus.InStock;
+
+        return new ProductDetailDto
+        {
+            Id = product.Id,
+            Sku = product.Sku,
+            Name = product.Name,
+            Description = product.Description,
+            Category = product.Category,
+            ReorderPoint = product.ReorderPoint,
+            UnitPrice = product.UnitPrice,
+            TotalCompanyStock = totalStock,
+            StockStatus = stockStatus,
+            WarehouseStock = product.StockLevels.Select(sl => new WarehouseStockDto
+            {
+                WarehouseId = sl.WarehouseId,
+                WarehouseName = sl.Warehouse.Name,
+                Quantity = sl.Quantity,
+                StockValue = sl.Quantity * product.UnitPrice
+            }).ToList()
+        };
+    }
+
     public async Task<IEnumerable<string>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Products

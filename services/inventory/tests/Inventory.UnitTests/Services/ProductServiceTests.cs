@@ -305,4 +305,134 @@ public class ProductServiceTests
         Assert.Equal("Mid", result.Items.Skip(1).First().Name);
         Assert.Equal("Low", result.Items.Last().Name);
     }
+
+    [Fact]
+    public async Task GetProductByIdAsync_ShouldReturnNull_WhenProductDoesNotExist()
+    {
+        // Arrange
+        var products = new List<Product>();
+        var productMock = products.BuildMockDbSet();
+        _mockContext.Setup(c => c.Products).Returns(productMock.Object);
+
+        // Act
+        var result = await _service.GetProductByIdAsync(Guid.NewGuid());
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetProductByIdAsync_ShouldReturnProductDetail_WhenProductExists()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var warehouseId = Guid.NewGuid();
+        var product = new Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            Sku = "TP-001",
+            UnitPrice = 20.5m,
+            ReorderPoint = 10
+        };
+
+        var warehouse = new Warehouse { Id = warehouseId, Name = "Main Warehouse" };
+        var stockLevel = new StockLevel
+        {
+            ProductId = productId,
+            Product = product,
+            WarehouseId = warehouseId,
+            Warehouse = warehouse,
+            Quantity = 15
+        };
+
+        product.StockLevels = new List<StockLevel> { stockLevel };
+
+        var products = new List<Product> { product };
+        var productMock = products.BuildMockDbSet();
+        _mockContext.Setup(c => c.Products).Returns(productMock.Object);
+
+        // Act
+        var result = await _service.GetProductByIdAsync(productId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(productId, result.Id);
+        Assert.Equal("Test Product", result.Name);
+        Assert.Equal(15, result.TotalCompanyStock);
+        Assert.Equal(ProductStockStatus.InStock, result.StockStatus);
+
+        Assert.Single(result.WarehouseStock);
+        var ws = result.WarehouseStock.First();
+        Assert.Equal(warehouseId, ws.WarehouseId);
+        Assert.Equal("Main Warehouse", ws.WarehouseName);
+        Assert.Equal(15, ws.Quantity);
+        Assert.Equal(307.5m, ws.StockValue); // 15 * 20.5
+    }
+
+    [Fact]
+    public async Task GetProductByIdAsync_ShouldReturnLowStock_WhenQuantityIsLow()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var product = new Product
+        {
+            Id = productId,
+            Name = "Low Stock Product",
+            ReorderPoint = 10
+        };
+
+        var warehouse = new Warehouse { Id = Guid.NewGuid(), Name = "Warehouse 1" };
+
+        // Quantity 5 is <= ReorderPoint 10
+        product.StockLevels = new List<StockLevel>
+        {
+            new StockLevel { Product = product, Quantity = 5, Warehouse = warehouse, WarehouseId = warehouse.Id }
+        };
+
+        var products = new List<Product> { product };
+        var productMock = products.BuildMockDbSet();
+        _mockContext.Setup(c => c.Products).Returns(productMock.Object);
+
+        // Act
+        var result = await _service.GetProductByIdAsync(productId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(5, result.TotalCompanyStock);
+        Assert.Equal(ProductStockStatus.LowStock, result.StockStatus);
+    }
+
+    [Fact]
+    public async Task GetProductByIdAsync_ShouldReturnOutOfStock_WhenQuantityIsZero()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var product = new Product
+        {
+            Id = productId,
+            Name = "Out of Stock Product",
+            ReorderPoint = 10
+        };
+
+        var warehouse = new Warehouse { Id = Guid.NewGuid(), Name = "Warehouse 1" };
+
+        // Quantity 0
+        product.StockLevels = new List<StockLevel>
+        {
+            new StockLevel { Product = product, Quantity = 0, Warehouse = warehouse, WarehouseId = warehouse.Id }
+        };
+
+        var products = new List<Product> { product };
+        var productMock = products.BuildMockDbSet();
+        _mockContext.Setup(c => c.Products).Returns(productMock.Object);
+
+        // Act
+        var result = await _service.GetProductByIdAsync(productId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(0, result.TotalCompanyStock);
+        Assert.Equal(ProductStockStatus.OutOfStock, result.StockStatus);
+    }
 }

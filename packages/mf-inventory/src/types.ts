@@ -1,13 +1,3 @@
-export interface Product {
-    id: string;
-    sku: string;
-    name: string;
-    category: string;
-    stockStatus: string;
-    totalQuantity: number;
-    unitPrice: number;
-}
-
 export interface PaginatedResult<T> {
     items: T[];
     totalCount: number;
@@ -17,4 +7,3 @@ export interface PaginatedResult<T> {
     pageNumber: number;
     pageSize: number;
 }
-

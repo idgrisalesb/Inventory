@@ -1,6 +1,6 @@
 # Story 3.1: Product Detail API
 
-**Status:** ready-for-dev
+**Status:** done
 **Story:** 3.1
 **Epic:** 3 - Detailed Stock Analysis
 **Author:** SiesaTeam (BMad Workflow)
@@ -29,7 +29,25 @@
 - [ ] **Error Handling:** Return `404 Not Found` if product ID does not exist.
 - [ ] **Performance:** Query should be optimized (avoid N+1) using EF Core `.Include()`.
 
----
+## TASKS/SUBTASKS
+
+- [x] **Task 1: Create Data Transfer Objects (DTOs)**
+    - [x] Create `WarehouseStockDto.cs` in `Inventory.Application/DTOs/`
+    - [x] Create `ProductDetailDto.cs` in `Inventory.Application/DTOs/` with all required properties
+- [x] **Task 2: Implement Service Logic**
+    - [x] Add `GetProductByIdAsync` method signature to `IProductService` contract
+    - [x] Implement `GetProductByIdAsync` in `ProductService` class
+    - [x] Implement EF Core query with `.Include()` and `.ThenInclude()` for stock levels/warehouses
+    - [x] Implement mapping logic including `TotalCompanyStock`, `StockStatus` and `StockValue` calculations
+    - [x] Handle null result from repository
+- [x] **Task 3: Implement Controller Endpoint**
+    - [x] Add `GetProductById` method to `ProductsController` with `[HttpGet("{id}")]` attribute
+    - [x] Call `_productService.GetProductByIdAsync(id)`
+    - [x] Return `Ok(dto)` if found
+    - [x] Return `NotFound()` if result is null
+- [x] **Task 4: Quality Assurance (Tests)**
+    - [x] Add unit tests for `ProductService` (verifying calculations and mapping)
+    - [x] Add unit tests for `ProductsController` (verifying 200 and 404 responses)
 
 ## DEVELOPER CONTEXT COMPENDIUM
 
@@ -92,7 +110,30 @@
     - **Controller:** Test `200 OK` generic return and `404 Not Found`.
 - **Integration Tests:** (Optional for this story if Unit Tests cover logic, but recommended to verify EF Includes).
 
----
+## DEV AGENT RECORD
+
+### Debug Log
+*(No logs yet)*
+
+### Completion Notes
+- Implemented `ProductDetailDto.cs` and `WarehouseStockDto.cs`.
+- Updated `ProductService.cs` to include `GetProductByIdAsync` with `Include`/`ThenInclude` logic.
+- Updated `ProductsController.cs` to expose the endpoint `GET /api/v1/products/{id}`.
+- Added comprehensive unit tests in `ProductServiceTests.cs` and `ProductsControllerTests.cs` covering success and not-found scenarios.
+- Verified all tests pass (38 tests).
+
+## FILE LIST
+- services/inventory/src/Inventory.Application/DTOs/WarehouseStockDto.cs
+- services/inventory/src/Inventory.Application/DTOs/ProductDetailDto.cs
+- services/inventory/src/Inventory.Application/Contracts/IProductService.cs
+- services/inventory/src/Inventory.Application/Services/ProductService.cs
+- services/inventory/src/Inventory.API/Controllers/ProductsController.cs
+- services/inventory/tests/Inventory.UnitTests/Services/ProductServiceTests.cs
+- services/inventory/tests/Inventory.UnitTests/Controllers/ProductsControllerTests.cs
+
+## CHANGE LOG
+- 2026-02-13: Review applied (Reviewer: SiesaTeam). Optimizations in `ProductService` (single sum calculation) and added robust unit tests for all stock status scenarios. Verified tests pass (40 tests).
+- 2026-02-13: Implemented Product Detail API logic and tests. Created DTOs, Service method, Controller endpoint.
 
 ## PREVIOUS STORY INTELLIGENCE
 *From Story 2.1 (Product List API)*
@@ -102,8 +143,6 @@
     - Check if `ProductDto` is reused. Recommendation: Create a dedicated `ProductDetailDto` because it contains the `WarehouseStock` list which is expensive/unnecessary for the list view.
     - Ensure `UnitPrice` is handled with correct exact precision (decimal).
 
----
-
 ## LATEST TECHNICAL SPECIFICS
 *(Simulated for .NET 10 Context)*
 
@@ -112,15 +151,11 @@
 - **REST Protocol:**
     - ID parameter should be validated (positive integer).
 
----
-
 ## PROJECT CONTEXT REFERENCE
 
 - **Architecture:** `_bmad-output/planning-artifacts/architecture.md`
 - **UX Design:** `_bmad-output/planning-artifacts/ux-design-specification.md` (Reference for data fields needed)
 - **PRD:** `_bmad-output/planning-artifacts/prd.md`
-
----
 
 ## STORY COMPLETION STATUS
 

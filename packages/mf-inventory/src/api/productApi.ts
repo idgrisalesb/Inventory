@@ -1,4 +1,5 @@
-import { Product, PaginatedResult } from '../types';
+import { PaginatedResult } from '../types';
+import { ProductDetailDto, Product } from '../types/product';
 
 export const getProducts = async (page: number = 1, pageSize: number = 20, token?: string | null, search?: string, category?: string | null, status?: string | null, sortBy?: string | null, sortDir?: boolean | null): Promise<PaginatedResult<Product>> => {
   const headers: HeadersInit = {
@@ -54,6 +55,28 @@ export const getCategories = async (token?: string | null): Promise<string[]> =>
 
     if (!response.ok) {
         throw new Error('Failed to fetch categories');
+    }
+
+    return response.json();
+};
+
+export const getProductDetail = async (id: string, token?: string | null): Promise<ProductDetailDto> => {
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json'
+    };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`/api/v1/products/${id}`, {
+        headers
+    });
+
+    if (!response.ok) {
+        if (response.status === 404) {
+             throw new Error('Product not found');
+        }
+        throw new Error('Failed to fetch product details');
     }
 
     return response.json();
