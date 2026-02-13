@@ -68,6 +68,10 @@ vi.mock('recharts', () => ({
 // Mock Router
 vi.mock('@tanstack/react-router', () => ({
     useNavigate: () => vi.fn(),
+    Link: ({ to, search, children }: any) => {
+        const query = search ? '?' + new URLSearchParams(search).toString() : '';
+        return <a href={to + query}>{children}</a>;
+    }
 }));
 
 const createTestQueryClient = () => new QueryClient({
@@ -148,4 +152,38 @@ describe('Dashboard Component', () => {
          expect(await screen.findByText('Stock Value by Category')).toBeInTheDocument();
          expect(await screen.findByText('Top Low Stock Alerts')).toBeInTheDocument();
     });
+
+    it('renders links for Low Stock and Out of Stock cards', async () => {
+        const mockData = {
+           totalSkus: 42,
+           totalStockValue: 12500.50,
+           lowStockCount: 5,
+           outOfStockCount: 2
+       };
+
+       vi.mocked(dashboardApi.fetchKpis).mockResolvedValue(mockData);
+
+       render(
+           <QueryClientProvider client={createTestQueryClient()}>
+               <Dashboard />
+           </QueryClientProvider>
+       );
+
+       // Wait for data
+       await screen.findByText('5');
+
+       // Check Low Stock Card Link (Value 5)
+       const lowStockValue = screen.getByText('5');
+       const lowStockLink = lowStockValue.closest('a');
+       expect(lowStockLink).toBeInTheDocument();
+       // Note: URLSearchParams sorting/encoding might vary, but strict equality check:
+       // search: { status: 'LowStock' } -> ?status=LowStock
+       expect(lowStockLink).toHaveAttribute('href', '/products?status=LowStock');
+
+       // Check Out of Stock Card Link (Value 2)
+       const outOfStockValue = screen.getByText('2');
+       const outOfStockLink = outOfStockValue.closest('a');
+       expect(outOfStockLink).toBeInTheDocument();
+       expect(outOfStockLink).toHaveAttribute('href', '/products?status=OutOfStock');
+   });
 });

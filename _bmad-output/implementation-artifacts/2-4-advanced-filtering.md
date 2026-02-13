@@ -1,6 +1,6 @@
 # Story 2.4: Advanced Filtering
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -22,31 +22,31 @@ so that I can focus on specific segments like "Low Stock Electronics".
 
 ## Tasks / Subtasks
 
-- [ ] **Backend: API & Service Layer**
-  - [ ] Update `IProductService` and `ProductService`:
-    - [ ] Add `string? category` and `ProductStockStatus? status` parameters to `GetProductsAsync`.
-    - [ ] Implement `category` filtering: `query = query.Where(p => p.Category == category)` (if not null).
-    - [ ] Implement `status` filtering (Logic Translation):
-      - [ ] `LowStock`: `q > 0 && q <= reorderPoint`
-      - [ ] `OutOfStock`: `q == 0`
-      - [ ] `InStock`: `q > reorderPoint`
-  - [ ] Update `ProductsController`:
-    - [ ] Accept `[FromQuery] string? category` and `[FromQuery] ProductStockStatus? status`.
-    - [ ] Pass parameters to service.
-  - [ ] Create `GET /api/v1/products/categories` endpoint (to populate dropdown).
-    - [ ] Return distinct categories from DB: `_context.Products.Select(p => p.Category).Distinct().ToListAsync()`.
+- [x] **Backend: API & Service Layer**
+  - [x] Update `IProductService` and `ProductService`:
+    - [x] Add `string? category` and `ProductStockStatus? status` parameters to `GetProductsAsync`.
+    - [x] Implement `category` filtering: `query = query.Where(p => p.Category == category)` (if not null).
+    - [x] Implement `status` filtering (Logic Translation):
+      - [x] `LowStock`: `q > 0 && q <= reorderPoint`
+      - [x] `OutOfStock`: `q == 0`
+      - [x] `InStock`: `q > reorderPoint`
+  - [x] Update `ProductsController`:
+    - [x] Accept `[FromQuery] string? category` and `[FromQuery] ProductStockStatus? status`.
+    - [x] Pass parameters to service.
+  - [x] Create `GET /api/v1/products/categories` endpoint (to populate dropdown).
+    - [x] Return distinct categories from DB: `_context.Products.Select(p => p.Category).Distinct().ToListAsync()`.
 
-- [ ] **Frontend: Hooks & State**
-  - [ ] Create `useCategories` hook (fetching from new endpoint).
-  - [ ] Update `useProductList` to accept `category` and `status`.
-  - [ ] Update `queryKey` to `['products', page, pageSize, search, category, status]`.
+- [x] **Frontend: Hooks & State**
+  - [x] Create `useCategories` hook (fetching from new endpoint).
+  - [x] Update `useProductList` to accept `category` and `status`.
+  - [x] Update `queryKey` to `['products', page, pageSize, search, category, status]`.
 
-- [ ] **Frontend: UI Implementation**
-  - [ ] Import `Select`, `Button` from `siesa-ui-kit`.
-  - [ ] Update `ProductList.tsx`:
-    - [ ] Add state mapping for filters.
-    - [ ] Render **Filter Bar** above table (below or next to Search).
-    - [ ] Implement "Clear Filters" button (resets state to null/undefined).
+- [x] **Frontend: UI Implementation**
+  - [x] Import `Select`, `Button` from `siesa-ui-kit`.
+  - [x] Update `ProductList.tsx`:
+    - [x] Add state mapping for filters.
+    - [x] Render **Filter Bar** above table (below or next to Search).
+    - [x] Implement "Clear Filters" button (resets state to null/undefined).
 
 ## Technical Requirements
 
@@ -103,9 +103,34 @@ so that I can focus on specific segments like "Low Stock Electronics".
 ## Dev Agent Record
 
 ### Agent Model Used
-{{agent_model_name_version}}
+google/gemini-3-pro-preview
 
 ### Completion Notes List
 - Implemented category and status filtering in backend.
 - Added logic translation for computed status in EF Core query.
 - Integrated `siesa-ui-kit` Select component.
+- Added `GET /api/v1/products/categories` endpoint.
+- Implemented `useCategories` hook and updated `useProductList`.
+- Added frontend filter UI in `ProductList.tsx` using `siesa-ui-kit` components (`Select`, `Button`).
+- Added comprehensive unit and integration tests for new features.
+
+### Code Review Improvements
+- Fixed UI bug where status badges were not coloring correctly due to casing mismatch with API.
+- Fixed frontend tests to use correct mock data format matching real API.
+- Added missing test coverage for `category` and `status` parameter passing in `ProductsControllerTests`.
+
+## File List
+- services/inventory/src/Inventory.Application/Contracts/IProductService.cs
+- services/inventory/src/Inventory.Application/Services/ProductService.cs
+- services/inventory/src/Inventory.API/Controllers/ProductsController.cs
+- services/inventory/tests/Inventory.UnitTests/Services/ProductServiceTests.cs
+- services/inventory/tests/Inventory.UnitTests/Controllers/ProductsControllerTests.cs
+- packages/mf-inventory/src/api/productApi.ts
+- packages/mf-inventory/src/features/products/hooks/useCategories.ts
+- packages/mf-inventory/src/features/products/hooks/useProductList.ts
+- packages/mf-inventory/src/features/products/ProductList.tsx
+- packages/mf-inventory/src/features/products/__tests__/useProductList.test.tsx
+- packages/mf-inventory/src/features/products/__tests__/ProductList.test.tsx
+
+## Change Log
+- 2026-02-13: Implemented Story 2.4 - Advanced Filtering. Added backend API support for category/status filters and frontend UI.

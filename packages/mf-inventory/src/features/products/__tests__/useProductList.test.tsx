@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { useProductList } from '../hooks/useProductList';
 import { getProducts } from '../../../api/productApi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -40,37 +40,57 @@ describe('useProductList', () => {
 
         await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', undefined);
+        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', undefined, undefined, undefined, undefined, undefined);
     });
 
-    it('updates page state and refetches', async () => {
+    it('updates page prop and refetches', async () => {
         const mockData = { items: [], totalPages: 1, totalCount: 0 };
         (getProducts as Mock).mockResolvedValue(mockData);
 
-        const { result } = renderHook(() => useProductList(), { wrapper });
+        const { result, rerender } = renderHook((props: any) => useProductList(props), { wrapper, initialProps: { page: 1 } });
 
         await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-        act(() => {
-            result.current.setPage(2);
-        });
+        // Update props
+        rerender({ page: 2 });
 
         await waitFor(() => {
             expect(result.current.page).toBe(2);
         });
-        // The first call was for page 1, verify the second call
-        expect(getProducts).toHaveBeenCalledWith(2, 20, 'test-token', undefined);
+
+        expect(getProducts).toHaveBeenCalledWith(2, 20, 'test-token', undefined, undefined, undefined, undefined, undefined);
     });
 
     it('fetches products with search term', async () => {
         const mockData = { items: [], totalPages: 1, totalCount: 0 };
         (getProducts as Mock).mockResolvedValue(mockData);
 
-        // @ts-ignore - search param not implemented yet
         const { result } = renderHook(() => useProductList({ search: 'Gadget' }), { wrapper });
 
         await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', 'Gadget');
+        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', 'Gadget', undefined, undefined, undefined, undefined);
+    });
+
+    it('fetches products with category and status', async () => {
+        const mockData = { items: [], totalPages: 1, totalCount: 0 };
+        (getProducts as Mock).mockResolvedValue(mockData);
+
+        const { result } = renderHook(() => useProductList({ category: 'Electronics', status: 'InStock' }), { wrapper });
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', undefined, 'Electronics', 'InStock', undefined, undefined);
+    });
+
+     it('fetches products with sorting', async () => {
+        const mockData = { items: [], totalPages: 1, totalCount: 0 };
+        (getProducts as Mock).mockResolvedValue(mockData);
+
+        const { result } = renderHook(() => useProductList({ sortBy: 'price', sortDir: true }), { wrapper });
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+        expect(getProducts).toHaveBeenCalledWith(1, 20, 'test-token', undefined, undefined, undefined, 'price', true);
     });
 });

@@ -28,7 +28,7 @@ public class ProductsControllerTests
         var items = new List<ProductDto> { new ProductDto { Id = Guid.NewGuid(), Name = "P1" } };
         var paginatedResult = new PaginatedResult<ProductDto>(items, 1, page, pageSize);
 
-        _mockService.Setup(s => s.GetProductsAsync(page, pageSize, null, It.IsAny<CancellationToken>()))
+        _mockService.Setup(s => s.GetProductsAsync(page, pageSize, null, null, null, null, null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(paginatedResult);
 
         // Act
@@ -39,6 +39,43 @@ public class ProductsControllerTests
         var returnVal = Assert.IsType<PaginatedResult<ProductDto>>(okResult.Value);
         Assert.Single(returnVal.Items);
         Assert.Equal("P1", returnVal.Items.First().Name);
+    }
+
+    [Fact]
+    public async Task Get_ShouldPassSearchTermToService()
+    {
+        // Arrange
+        string search = "test";
+        var items = new List<ProductDto>();
+        var paginatedResult = new PaginatedResult<ProductDto>(items, 0, 1, 10);
+
+        _mockService.Setup(s => s.GetProductsAsync(It.IsAny<int>(), It.IsAny<int>(), search, null, null, null, null, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(paginatedResult);
+
+        // Act
+        var result = await _controller.Get(1, 10, search);
+
+        // Assert
+        _mockService.Verify(s => s.GetProductsAsync(1, 10, search, null, null, null, null, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Get_ShouldPassFiltersToService()
+    {
+        // Arrange
+        string category = "Electronics";
+        var status = ProductStockStatus.LowStock;
+        var items = new List<ProductDto>();
+        var paginatedResult = new PaginatedResult<ProductDto>(items, 0, 1, 10);
+
+        _mockService.Setup(s => s.GetProductsAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), category, status, null, null, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(paginatedResult);
+
+        // Act
+        var result = await _controller.Get(1, 10, null, category, status);
+
+        // Assert
+        _mockService.Verify(s => s.GetProductsAsync(1, 10, null, category, status, null, null, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

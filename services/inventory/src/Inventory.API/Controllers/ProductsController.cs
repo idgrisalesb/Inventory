@@ -19,12 +19,19 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedResult<ProductDto>>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<PaginatedResult<ProductDto>>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null, [FromQuery] string? category = null, [FromQuery] ProductStockStatus? status = null, [FromQuery] string? sortBy = null, [FromQuery] bool? sortDescending = null, CancellationToken cancellationToken = default)
     {
         if (page < 1) return BadRequest(new ProblemDetails { Title = "Invalid page", Detail = "Page number must be greater than 0." });
         if (pageSize < 1) return BadRequest(new ProblemDetails { Title = "Invalid pageSize", Detail = "Page size must be greater than 0." });
 
-        var result = await _service.GetProductsAsync(page, pageSize, search, cancellationToken);
+        var result = await _service.GetProductsAsync(page, pageSize, search, category, status, sortBy, sortDescending, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("categories")]
+    public async Task<ActionResult<IEnumerable<string>>> GetCategories(CancellationToken cancellationToken = default)
+    {
+        var result = await _service.GetCategoriesAsync(cancellationToken);
         return Ok(result);
     }
 }

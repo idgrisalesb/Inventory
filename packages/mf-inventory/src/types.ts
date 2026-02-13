@@ -5,6 +5,8 @@ export interface Product {
     category: string;
     stockStatus: string;
     totalQuantity: number;
+    unitPrice: number;
+}
 
 export interface PaginatedResult<T> {
     items: T[];

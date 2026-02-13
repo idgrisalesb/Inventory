@@ -1,37 +1,29 @@
-import { useState, useEffect } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { getProducts } from '../../../api/productApi';
 import { useAuth } from '../../../context/AuthContext';
 
 interface UseProductListOptions {
-    initialPage?: number;
-    initialPageSize?: number;
+    page?: number;
+    pageSize?: number;
     search?: string;
+    category?: string | null;
+    status?: string | null;
+    sortBy?: string | null;
+    sortDir?: boolean | null;
 }
 
-export const useProductList = ({ initialPage = 1, initialPageSize = 20, search }: UseProductListOptions = {}) => {
-    const [page, setPage] = useState(initialPage);
-    const [pageSize, setPageSize] = useState(initialPageSize);
+export const useProductList = ({ page = 1, pageSize = 20, search, category, status, sortBy, sortDir }: UseProductListOptions = {}) => {
     const { token } = useAuth();
 
-    // Reset page to 1 when search term changes
-    useEffect(() => {
-        if (search !== undefined) {
-            setPage(1);
-        }
-    }, [search]);
-
     const query = useQuery({
-        queryKey: ['products', page, pageSize, search],
-        queryFn: () => getProducts(page, pageSize, token, search),
+        queryKey: ['products', page, pageSize, search, category, status, sortBy, sortDir],
+        queryFn: () => getProducts(page, pageSize, token, search, category, status, sortBy, sortDir),
         placeholderData: keepPreviousData,
     });
 
     return {
         ...query,
         page,
-        setPage,
         pageSize,
-        setPageSize
     };
 };

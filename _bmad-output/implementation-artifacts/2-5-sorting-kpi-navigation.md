@@ -1,6 +1,6 @@
 # Story 2.5: Sorting & KPI Navigation
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -29,20 +29,20 @@ so that I can investigate the most expensive or scarce items first.
 
 ## Tasks / Subtasks
 
-- [ ] **Backend: API Sorting Support**
-  - [ ] Update `ProductDto` / `GetProductsQuery` to accept `SortBy` and `SortDescending` parameters.
-  - [ ] Implement dynamic sorting in `ProductService` (LINQ `OrderBy` / `OrderByDescending`).
-  - [ ] Validate allowed sort keys (Name, Sku, Quantity, Price).
+- [x] **Backend: API Sorting Support**
+  - [x] Update `ProductDto` / `GetProductsQuery` to accept `SortBy` and `SortDescending` parameters.
+  - [x] Implement dynamic sorting in `ProductService` (LINQ `OrderBy` / `OrderByDescending`).
+  - [x] Validate allowed sort keys (Name, Sku, Quantity, Price).
 
-- [ ] **Frontend: Dashboard Navigation**
-  - [ ] Update `LowStockAlerts` and KPI components to use `Link` from `@tanstack/react-router`.
-  - [ ] Construct URLs with query parameters (`/products?status=LowStock`).
+- [x] **Frontend: Dashboard Navigation**
+  - [x] Update `LowStockAlerts` and KPI components to use `Link` from `@tanstack/react-router`.
+  - [x] Construct URLs with query parameters (`/products?status=LowStock`).
 
-- [ ] **Frontend: Product List Sorting**
-  - [ ] Import `SortDirection` type from `siesa-ui-kit`.
-  - [ ] Add `sortBy` and `sortDir` to `ProductSearch` params (TanStack Router).
-  - [ ] Implement `onSort` handler in `ProductList` component.
-  - [ ] Pass `sortColumn`, `sortDirection`, and `onSort` props to `siesa-ui-kit` Table.
+- [x] **Frontend: Product List Sorting**
+  - [x] Import `SortDirection` type from `siesa-ui-kit`.
+  - [x] Add `sortBy` and `sortDir` to `ProductSearch` params (TanStack Router).
+  - [x] Implement `onSort` handler in `ProductList` component.
+  - [x] Pass `sortColumn`, `sortDirection`, and `onSort` props to `siesa-ui-kit` Table.
 
 ## Dev Notes
 
@@ -96,7 +96,28 @@ Based on analysis of `packages/mf-inventory/node_modules/siesa-ui-kit/dist/compo
 Claude 3.7 Sonnet (Preview)
 
 ### File List
-- `packages/mf-inventory/src/features/products/ProductList.tsx`
+- `services/inventory/src/Inventory.Application/Contracts/IProductService.cs`
 - `services/inventory/src/Inventory.Application/Services/ProductService.cs`
 - `services/inventory/src/Inventory.API/Controllers/ProductsController.cs`
-- `packages/mf-inventory/src/features/dashboard/components/Dashboard.tsx` (KPI Cards)
+- `services/inventory/tests/Inventory.UnitTests/Services/ProductServiceTests.cs`
+- `services/inventory/tests/Inventory.UnitTests/Controllers/ProductsControllerTests.cs`
+- `packages/mf-inventory/src/api/productApi.ts`
+- `packages/mf-inventory/src/features/products/hooks/useProductList.ts`
+- `packages/mf-inventory/src/routes/products.tsx`
+- `packages/mf-inventory/src/features/products/ProductList.tsx`
+- `packages/mf-inventory/src/features/dashboard/components/KpiCard.tsx`
+- `packages/mf-inventory/src/features/dashboard/Dashboard.tsx`
+- `packages/mf-inventory/src/features/dashboard/__tests__/Dashboard.test.tsx`
+- `packages/mf-inventory/src/features/products/__tests__/ProductList.test.tsx`
+- `packages/mf-inventory/src/features/products/__tests__/useProductList.test.tsx`
+- `packages/mf-inventory/src/features/products/hooks/useCategories.ts`
+
+### Completion Notes
+- Implemented backend sorting with comprehensive unit tests for `ProductService` and `ProductsController`.
+- Updated `ProductList` to use URL-driven state for filtering and sorting via TanStack Router.
+- Implemented Dashboard KPI navigation with links to pre-filtered product lists.
+- Added usage of `siesa-ui-kit` `SortDirection` and `Table` props.
+- Ensured strict typing and validation for router search parameters.
+- **Fixed Critical Issue**: Added missing `TotalQuantity` and `UnitPrice` to `ProductDto` and Service projection to ensure sorting columns are populated.
+- **Fixed Frontend Type**: Updated `Product` interface in `types.ts` to match backend DTO.
+- Verified all requirements with frontend and backend tests.

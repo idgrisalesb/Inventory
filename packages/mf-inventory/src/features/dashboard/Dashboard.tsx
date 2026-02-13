@@ -57,11 +57,15 @@ const Dashboard = memo(() => {
                     title={t('dashboard.kpi.lowStock')}
                     value={kpiData?.lowStockCount ?? 0}
                     isLoading={kpiLoading}
+                    to="/products"
+                    search={{ status: 'LowStock' }}
                 />
                 <KpiCard
                     title={t('dashboard.kpi.outOfStock')}
                     value={kpiData?.outOfStockCount ?? 0}
                     isLoading={kpiLoading}
+                    to="/products"
+                    search={{ status: 'OutOfStock' }}
                 />
             </div>
 
