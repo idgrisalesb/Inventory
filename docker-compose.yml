@@ -17,18 +17,18 @@ services:
       timeout: 5s
       retries: 5
 
-  inventory-api:
-    build:
-      context: ./services/inventory
-      dockerfile: src/Inventory.API/Dockerfile
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=inventory-db;Database=inventory_db;Username=inventory_user;Password=inventory_password
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5000:80"
-    depends_on:
-      inventory-db:
-        condition: service_healthy
+  # inventory-api:
+  #   build:
+  #     context: ./services/inventory
+  #     dockerfile: src/Inventory.API/Dockerfile
+  #   environment:
+  #     - ConnectionStrings__DefaultConnection=Host=inventory-db;Database=inventory_db;Username=inventory_user;Password=inventory_password
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   ports:
+  #     - "5000:80"
+  #   depends_on:
+  #     inventory-db:
+  #       condition: service_healthy
 
 volumes:
   inventory_postgres_data:

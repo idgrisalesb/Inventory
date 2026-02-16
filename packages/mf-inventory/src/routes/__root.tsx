@@ -33,11 +33,6 @@ function RootComponent() {
             </nav>
           </div>
           <div>
-            {token ? (
-              <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">{t('app.auth.authenticated')}</span>
-            ) : (
-              <span className="text-sm text-red-600 bg-red-50 px-2 py-1 rounded">{t('app.auth.noToken')}</span>
-            )}
           </div>
         </div>
       </header>

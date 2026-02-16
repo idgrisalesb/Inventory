@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory.API.Controllers;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 [Route("api/v1/warehouses")]
 public class WarehouseController : ControllerBase

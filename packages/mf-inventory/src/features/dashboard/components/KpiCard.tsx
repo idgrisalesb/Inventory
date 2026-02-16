@@ -1,6 +1,7 @@
 import { memo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, Skeleton } from 'siesa-ui-kit';
 import { Link } from '@tanstack/react-router';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 interface KpiCardProps {
     title: string;
@@ -10,20 +11,24 @@ interface KpiCardProps {
     search?: Record<string, string>;
 }
 
+function cn(...inputs: (string | undefined)[]) {
+  return twMerge(clsx(inputs));
+}
+
 export const KpiCard = memo(({ title, value, isLoading, to, search }: KpiCardProps) => {
     const cardContent = (
-        <Card className={to ? "cursor-pointer hover:bg-slate-50 transition-colors" : ""}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{title}</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <div className={cn("rounded-lg border bg-card text-card-foreground shadow-sm bg-white", to ? "cursor-pointer hover:bg-slate-50 transition-colors" : "")}>
+            <div className="flex flex-col space-y-1.5 p-6 pb-2">
+                <h3 className="text-sm font-medium tracking-tight">{title}</h3>
+            </div>
+            <div className="p-6 pt-0">
                 {isLoading ? (
-                    <Skeleton className="h-8 w-[100px]" />
+                    <div className="animate-pulse rounded-md bg-gray-200 h-8 w-[100px]" />
                 ) : (
                     <div className="text-2xl font-bold">{value}</div>
                 )}
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 
     if (to) {

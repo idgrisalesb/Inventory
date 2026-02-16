@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory.API.Controllers;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 [Route("api/v1/products")]
 public class ProductsController : ControllerBase

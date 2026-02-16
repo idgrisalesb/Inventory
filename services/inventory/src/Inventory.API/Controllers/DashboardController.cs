@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory.API.Controllers;
 
-[Authorize(Policy = "InventoryManager")]
+// [Authorize(Policy = "InventoryManager")]
 [ApiController]
 [Route("api/v1/dashboard")]
 public class DashboardController : ControllerBase

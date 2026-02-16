@@ -18,6 +18,8 @@ namespace Inventory.Infrastructure
                     b => b.MigrationsAssembly(typeof(InventoryDbContext).Assembly.FullName))
                 .UseSnakeCaseNamingConvention());
 
+            services.AddScoped<IInventoryDbContext>(provider => provider.GetRequiredService<InventoryDbContext>());
+
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 
             return services;

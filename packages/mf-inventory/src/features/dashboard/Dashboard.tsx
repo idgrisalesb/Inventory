@@ -6,7 +6,7 @@ import { fetchCharts, fetchAlerts } from '../../api/dashboardApi';
 import { KpiCard } from './components/KpiCard';
 import { StockValueChart } from './components/StockValueChart';
 import { LowStockAlerts } from './components/LowStockAlerts';
-import { Alert, AlertDescription, AlertTitle } from 'siesa-ui-kit';
+import { Alert } from 'siesa-ui-kit';
 
 const Dashboard = memo(() => {
     const { t, i18n } = useTranslation();
@@ -26,10 +26,7 @@ const Dashboard = memo(() => {
 
     if (kpiError) {
         return (
-            <Alert variant="destructive">
-                <AlertTitle>{t('dashboard.errors.title')}</AlertTitle>
-                <AlertDescription>{t('dashboard.errors.general')}</AlertDescription>
-            </Alert>
+            <Alert variant="destructive" title={t('dashboard.errors.title')} description={t('dashboard.errors.general')} />
         );
     }
 
@@ -76,10 +73,7 @@ const Dashboard = memo(() => {
                             <span className="text-gray-500">{t('dashboard.charts.loading')}</span>
                         </div>
                     ) : chartError ? (
-                        <Alert variant="destructive">
-                            <AlertTitle>{t('dashboard.errors.title')}</AlertTitle>
-                            <AlertDescription>{t('dashboard.charts.error')}</AlertDescription>
-                        </Alert>
+                        <Alert variant="destructive" title={t('dashboard.errors.title')} description={t('dashboard.charts.error')} />
                     ) : (
                         <StockValueChart data={chartData || []} />
                     )}
@@ -90,10 +84,7 @@ const Dashboard = memo(() => {
                             <span className="text-gray-500">{t('dashboard.alerts.loading')}</span>
                         </div>
                     ) : alertsError ? (
-                        <Alert variant="destructive">
-                            <AlertTitle>{t('dashboard.errors.title')}</AlertTitle>
-                            <AlertDescription>{t('dashboard.alerts.error')}</AlertDescription>
-                        </Alert>
+                        <Alert variant="destructive" title={t('dashboard.errors.title')} description={t('dashboard.alerts.error')} />
                     ) : (
                         <LowStockAlerts data={alertsData || []} />
                     )}

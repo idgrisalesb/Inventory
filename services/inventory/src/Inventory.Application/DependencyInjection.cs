@@ -9,6 +9,8 @@ namespace Inventory.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IWarehouseService, WarehouseService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IDashboardService, DashboardService>();
             return services;
         }
     }

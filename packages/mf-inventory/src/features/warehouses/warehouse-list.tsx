@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Table, Skeleton } from 'siesa-ui-kit';
+import { Table } from 'siesa-ui-kit';
 import { useAuth } from '../../context/AuthContext';
 import { getWarehouses } from '../../api/warehouseApi';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ export const WarehouseList = () => {
     queryFn: () => getWarehouses(token || null),
   });
 
-  if (isPending) return <div className="p-4"><Skeleton className="h-64 w-full" /></div>;
+  if (isPending) return <div className="p-4"><div className="animate-pulse rounded-md bg-gray-200 h-64 w-full" /></div>;
 
   if (error) return <div className="p-4 text-red-500">{t('warehouses.error', { error: error.message })}</div>;
 
