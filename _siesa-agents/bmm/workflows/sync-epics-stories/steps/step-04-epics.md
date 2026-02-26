@@ -37,6 +37,7 @@ To read `epics.md`, check for existing Epics in Jira, create missing ones, and u
 
 - Read `{configFile}` to get `project_key` and `cloud_id`.
 - Read `{epicsFile}`.
+- **CRITICAL:** Read the epic template payload from `{project-root}/_siesa-agents/bmm/data/templates/jira/epic-template.json`.
 
 ### 2. Iterate and Sync
 
@@ -54,32 +55,15 @@ For each Epic in the file:
 
     3.  **Creation (Atomic Transaction):**
 
-        -   Execute `createJiraIssue` using the following REFERENCE TEMPLATE:
+        -   Execute `createJiraIssue`. DO NOT use hardcoded JSON.
+        -   You MUST format the JSON object using the `epic-template.json` file you loaded in Step 1.
+        -   Extract the `{{Epic Number}}` (e.g., "1" from "Epic 1: Core Inventory Visibility...") and `{{Epic Name}}` from the Markdown.
+        -   Inject those, along with `{{goal}}`, `{{description}}`, and `{{project_key}}` into the template payload.
+        -   **Hierarchy Handling (CRITICAL):** Check `project_config.yaml` for `hierarchy_level_2_name`.
+            -   **If present (Custom Hierarchy):** Search for this issue using JQL to get its Key. Inject that Key into `{{Parent_Key}}` in the template.
+            -   **If absent (Standard Hierarchy):** Remove the `"parent": "{{Parent_Key}}"` property completely from the JSON payload before sending it to Jira.
 
         -   ⚠️ **CRITICAL CONSTRAINT:** `issueTypeName` MUST be exactly `"Epic"`. DO NOT translate to "Épica" or any other language. The API requires the English identifier.
-
-        
-
-        ```json
-
-        {
-
-          "provider": "jira",
-
-          "issueTypeName": "Epic",
-
-          "summary": "[Epic] {{Epic Name}}",
-
-
-      "description": "## Epic Goal\n{{goal}}\n\n## Details\n{{description}}\n\n---\n*Source: {{file_path}}*",
-      "projectKey": "{{project_key}}",
-      "additional_fields": {
-         "priority": { "name": "Medium" },
-         "labels": ["prd-sync", "automated", "epic-file-sync", "{{epic-slug}}"],
-         "customfield_10011": "{{Epic Name}}"
-      }
-    }
-    ```
 
 4.  **Immediate File Persistence (CRITICAL):**
     -   **IMMEDIATELY** after obtaining the new `key` (or finding an existing one):

@@ -59,6 +59,7 @@ To read story files from `{storiesFolder}`, link them to Parent Epics (found in 
 - Read `{configFile}`.
 - Get list of all `.md` files in `{storiesFolder}`.
 - Read `{epicsFile}` (to lookup Parent Epic IDs).
+- **CRITICAL:** Read the template payloads from `{project-root}/_siesa-agents/bmm/data/templates/jira/` (`story-template.json`, `task-template.json`, and `subtask-template.json`).
 
 ### 3. Iterate and Sync
 
@@ -94,23 +95,10 @@ For each markdown file in `{storiesFolder}`:
         -   Proceed to Step 4.
 
 4.  **Creation (Atomic Transaction - If Condition Not Found):**
-    -   Execute `createJiraIssue` using the following REFERENCE TEMPLATE:
-
-    ```json
-    {
-      "provider": "jira",
-      "issueTypeName": "Story",
-      "projectKey": "{{project_key}}",
-      "summary": "{{Story Name}}",
-      "description": "## User Story\n{{user_story}}\n\n## Description\n{{description}}\n\n## Acceptance Criteria\n{{acceptance_criteria}}\n\n---\n*Source: {{file_path}}*",
-      "parent": "{{Parent_Epic_Key}}",
-      "additional_fields": {
-         "priority": { "name": "Medium" },
-         "labels": ["prd-sync", "automated", "epic-file-sync", "{{parent-epic-slug}}"],
-         "customfield_10014": "{{Parent_Epic_Key}}" // 'Epic Link' field. IMPORTANT: Check project capability for field ID.
-      }
-    }
-    ```
+    -   Execute `createJiraIssue`. DO NOT use hardcoded JSON.
+    -   You MUST format the JSON object using `story-template.json` that you loaded in Step 2.
+    -   Extract the `{{Story ID}}` (e.g. "1.1") and `{{Story Name}}` from the Markdown file's main H1 header.
+    -   Inject those, along with `{{user_story}}`, `{{acceptance_criteria}}`, `{{dev_notes}}`, and `{{Parent_Epic_Key}}` into the template payload.
     -   **Set:** `{{KEY}}` = New Issue Key.
 
 5.  **Immediate File Persistence (CRITICAL):**
@@ -140,23 +128,9 @@ For each markdown file in `{storiesFolder}`:
                 -   Check: Is `{{Task Name}}` already present in the *already synced tasks* list?
                 -   **If YES:** **SKIP** this task. Log "Task '{{Task Name}}' already synced."
                 -   **If NO:** **PROCEED** to Create.
-            -   **Create:** Execute `createJiraIssue`:
-                ```json
-                {
-                  "provider": "jira",
-                  "issueTypeName": "Sub-task",
-                  "projectKey": "{{project_key}}",
-                  "parent": "{{KEY}}",
-                  "summary": "{{Task Text}}"
-                }
-                ```
-            -   **Context:** If the task has nested items (indented bullets), combine them into a **simple markdown bulleted list** (ensuring no checklist `[ ]` syntax is used) and execute `addCommentToJiraIssue`:
-                ```json
-                {
-                   "issueIdOrKey": "{{New_SubTask_Key}}",
-                   "commentBody": "## Details\n\n{{nested_bullets_content}}"
-                }
-                ```
+            -   **Create:** Execute `createJiraIssue` formatting the `task-template.json` loaded in Step 2.
+                -   Remember to inject `{{Story ID}}` parsed from earlier, `{{Task Name}}`, and `{{project_key}}`.
+            -   **Context:** If the task has nested items (indented bullets), combine them into a **simple markdown bulleted list** (ensuring no checklist `[ ]` syntax is used) and execute `addCommentToJiraIssue` formatting the `subtask-template.json` loaded in Step 2.
             -   **Persistence (Append Update):**
                 -   **Immediately** append a new row to the `## Synced Tasks` table (create table header if it doesn't exist yet):
                 ```markdown
